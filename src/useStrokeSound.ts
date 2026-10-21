@@ -1,0 +1,9 @@
+import {useEffect,useRef} from 'react';
+import {createStrokeAudio} from './stroke-audio';
+export function useStrokeSound(kind:'draw'|'sand',enabled:boolean,volume:number,pauseSignal:number){
+ const voice=useRef<{ctx:AudioContext;sound:ReturnType<typeof createStrokeAudio>}|null>(null),pointer=useRef<number|null>(null),last=useRef({x:0,y:0,time:0,width:1}),idle=useRef<ReturnType<typeof setTimeout>|null>(null);
+ const clearIdle=()=>{if(idle.current)clearTimeout(idle.current);idle.current=null;};
+ const end=(id?:number)=>{if(id!==undefined&&pointer.current!==id)return;pointer.current=null;clearIdle();voice.current?.sound.quiet();};
+ useEffect(()=>{const dispose=()=>{end();const v=voice.current;voice.current=null;if(v){v.sound.dispose();if(v.ctx.state!=='closed')void v.ctx.close().catch(()=>{});}};dispose();const hide=()=>{if(document.hidden)dispose();};document.addEventListener('visibilitychange',hide);return()=>{document.removeEventListener('visibilitychange',hide);dispose();};},[kind,enabled,volume,pauseSignal]);
+ return {start(id:number,x:number,y:number,width:number){if(pointer.current!==null||!enabled||volume<=0||document.hidden)return;try{if(!voice.current){const ctx=new AudioContext();voice.current={ctx,sound:createStrokeAudio(ctx,kind,volume)};}void voice.current.ctx.resume().catch(()=>end());pointer.current=id;last.current={x,y,time:performance.now(),width:Math.max(1,width)};}catch{end();}},move(id:number,x:number,y:number){if(pointer.current!==id||!voice.current||document.hidden)return;const time=performance.now(),previous=last.current,delta=time-previous.time;const distance=Math.hypot(x-previous.x,y-previous.y);if(delta<=0||distance<.4)return;last.current={...previous,x,y,time};voice.current.sound.move(Math.min(1,distance/previous.width/(Math.max(8,delta)/1000)*1.2));clearIdle();idle.current=setTimeout(()=>voice.current?.sound.quiet(),90);},end};
+}

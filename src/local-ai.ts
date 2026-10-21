@@ -1,3 +1,4 @@
+import {preparationProgress} from './local-ai-status.ts';
 import { activities, activityIds } from './activity-registry.ts';
 import type { WebWorkerMLCEngine } from '@mlc-ai/web-llm';
 export type Message = { role:'user'|'assistant'; content:string };
@@ -9,10 +10,11 @@ mood: null, lake for a still space, sand for warmth, or dusk for rest. Prefer nu
 ambience: keep, soften, or quiet. Never turn audio on.
 artifact: null, or an object with kind (garden, stars, feeling), title (up to 60 characters), text (up to 240 characters), palette (lake, dusk, sand). You may autonomously compose a new visual or reflection for this moment, when fitting. Do not create one every turn. Feeling cards reflect the person's own words, never diagnose or assert how they feel. Do not explain app features. Honor paused room creations and listen-only mode: artifact null.
 Do not claim to start an activity; the person chooses. Never output code, markup, URLs or extra fields.`+`\nActivity catalog: ${activityIds.map(id=>id+": "+activities[id].summary).join("; ")}`;
+export const localVoiceInstructions = `You are a calm, attentive AI companion. Reply directly to the person's words in one or two short sentences, in plain spoken text only. Acknowledge something specific; ask at most one optional question. Do not output JSON, code, markup, or app instructions. Respect requests to just listen or avoid advice; do not repeat declined exercises. Suggest an activity only if asked. Do not diagnose, prescribe, claim to be human, force optimism, or encourage dependence. If there is immediate danger, encourage nearby trusted people or local emergency help; never invent phone numbers.`;
 export async function loadLocalAI(worker:Worker,onProgress:(text:string)=>void):Promise<WebWorkerMLCEngine> {
   const {CreateWebWorkerMLCEngine}=await import('@mlc-ai/web-llm');
   return CreateWebWorkerMLCEngine(worker,'Qwen2.5-1.5B-Instruct-q4f16_1-MLC',{
-    initProgressCallback:report=>onProgress(`Preparing your companion · ${Math.round(Math.max(0,Math.min(1,report.progress))*100)}%`)
+    initProgressCallback:report=>onProgress(preparationProgress(report.progress,report.text))
   });
 }
 export function boundedMessages(messages:Message[]):Message[]{

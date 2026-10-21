@@ -25,6 +25,8 @@ first.onend();advance(1000);assert.equal(turns.length,1);assert.equal(recognizer
 loop.pause();loop.resume();assert.equal(recognizers.length,2);
 const second=recognizers.at(-1);second.onresult({resultIndex:0,results:[{0:{transcript:'Do not send me'},isFinal:true}]});loop.stop();advance(2000);assert.equal(turns.length,1);second.onend();advance(1000);assert.equal(recognizers.length,2);
 loop.start();recognizers.at(-1).onerror({error:'not-allowed'});advance(5000);assert.equal(loop.isActive(),false);assert.equal(errors.length,1);assert.deepEqual(states.at(-1),[false,false]);
+loop.start();let stable=recognizers.at(-1);stable.onresult({resultIndex:0,results:[{0:{transcript:'Stable words'},isFinal:false}]});advance(1000);stable.onresult({resultIndex:0,results:[{0:{transcript:'Stable words'},isFinal:false}]});advance(800);assert.equal(turns.at(-1),'Stable words','duplicate interim events must not postpone a turn forever');loop.stop();
+loop.start();let finish=recognizers.at(-1);finish.onresult({resultIndex:0,results:[{0:{transcript:'Finish this thought'},isFinal:true}]});loop.finishTurn();advance(2000);assert.equal(turns.filter(t=>t==='Finish this thought').length,1,'finish button must submit recognized words exactly once');loop.stop();
 console.log('Upgrade checks passed: preference/decline/cooldown policy, catalog actions, subtitles, silence auto-send, exactly-once turns, resume, cancellation, and permission failure.');
 const {readFile}=await import('node:fs/promises');
 for(const file of ['rain.ogg','water-drops.ogg']){const bytes=await readFile(new URL('../public/audio/'+file,import.meta.url));assert.equal(bytes.subarray(0,4).toString(),'OggS');assert(bytes.length>100000);}

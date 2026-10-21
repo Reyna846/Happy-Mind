@@ -17,8 +17,9 @@ const source=ts.transpileModule(readFileSync('src/useMomentSound.ts','utf8'),{co
 const doc={hidden:false,addEventListener(_,fn){this.hide=fn;},removeEventListener(){}};
 const scope={exports:{},require:id=>id==='react'?{useRef:value=>({current:value}),useEffect:fn=>effects.push(fn)}:{volumeGain:()=>.1},AudioContext:Context,document:doc,performance:{now:()=>clock},Math,Float32Array};vm.runInNewContext(source,scope);
 const play=scope.exports.useMomentSound(true,.5,0);const cleanup=effects.pop()();
-for(const kind of ['bubble','glow','sand','water','draw','step','clear']){clock+=150;play(kind);}
-assert.equal(contexts.length,1);assert.equal(contexts[0].sources.length,7);play('bubble');assert.equal(contexts[0].sources.length,7);
+for(const kind of ['bubble','glow','sand','water','draw','step','clear','saber']){clock+=350;play(kind);}
+assert.equal(contexts.length,1);assert.equal(contexts[0].sources.length,8);play('bubble');assert.equal(contexts[0].sources.length,8);
+clock+=350;play('water');const drops=contexts[0].sources.length;clock+=150;play('water');assert.equal(contexts[0].sources.length,drops,'water drag must space raindrops apart');
 doc.hidden=true;doc.hide();assert.equal(contexts[0].state,'closed');clock+=150;play('water');assert.equal(contexts.length,1);cleanup();doc.hidden=false;
 for(const [enabled,volume] of [[false,.5],[true,0]]){const silent=scope.exports.useMomentSound(enabled,volume,0);effects.pop()();clock+=150;silent('bubble');assert.equal(contexts.length,1);}
-console.log('Moment sound checks passed: all seven voices, throttling, mute/zero volume, hidden-page cleanup.');
+console.log('Moment sound checks passed: all eight voices, throttling, mute/zero volume, hidden-page cleanup.');

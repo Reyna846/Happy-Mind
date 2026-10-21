@@ -1,0 +1,114 @@
+/* Content widths grow with the viewport; session panels keep their state. */
+main,.session-panel,main>section,.header-left{min-width:0}
+main{width:100%;align-items:flex-start;padding-bottom:calc(112px + env(safe-area-inset-bottom))}
+header{flex-shrink:0}
+textarea{max-width:100%}
+.message p,.moment-tile strong,.moment-tile small,.home-talk-card small{overflow-wrap:anywhere}
+.fidget-surface{height:auto;max-height:none;aspect-ratio:300/280}
+.slide-entry{overflow-y:auto;justify-content:safe center;min-height:0}
+.slide-entry>*{flex-shrink:0}
+.entry-track{container-type:inline-size}
+.entry-thumb{transform:translateX(calc(var(--entry-progress) * (100cqw - 64px)))!important}
+.room-nav{padding-bottom:max(6px,env(safe-area-inset-bottom))}
+@media(min-width:640px){
+ header,.room-talk header{width:min(100%,1120px);margin:0 auto;height:88px;padding:0 32px}
+ .header-left .brand{font-size:23px}
+ .header-right{gap:10px}
+ .room-nav{width:min(calc(100% - 40px),520px);bottom:16px;border-radius:30px;padding:7px}
+ .room-nav button{min-height:60px;gap:7px}
+ .room-nav button span{font-size:12px}
+ .chat-room{width:min(100%,760px);max-width:760px;padding:12px 32px 28px}
+ .chat-room .conversation-mode-row{margin-bottom:20px;padding:5px 8px}
+ .conversation-mode-row .mode-chip{font-size:14px;padding:10px 18px}
+ .companion-options{font-size:12px}
+ .view-voice .voice-orb{width:180px;height:180px;margin:20px auto 24px}
+ .subtitle-box{max-width:none;width:100%}
+ .subtitle-box .subtitle-text{font-size:20px;line-height:1.7;height:132px;min-height:132px;padding:22px 26px}
+ .voice-actions .hands-free-button{font-size:22px;min-height:56px}
+ .voice-actions{margin-top:16px;gap:16px}
+ .voice-secondary .icon-button{width:50px;height:50px}
+ .chat-room .message p{font-size:16px;line-height:1.7}
+ .chat-room .message small{font-size:10px}
+ .chat-room .message{max-width:88%;padding:20px 24px}
+ .view-chat .chat-transcript{min-height:230px;max-height:clamp(230px,calc(100svh - 420px),560px);gap:18px}
+ .chat-composer textarea{font-size:16px;line-height:1.6}
+ .chat-composer{padding:18px 20px}
+ .chat-notice,.companion-setup p,.module-tray .quiet-link{font-size:13px}
+ .moments-hub{width:min(100%,1040px);padding:16px 32px 36px}
+ .moments-hub h1{font-size:40px;margin:12px 0 16px}
+ .moment-category{font-size:18px;margin-top:32px}
+ .moment-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+ .moments-hub .moment-tile,.moments-hub .moment-tile:last-child{min-height:150px;padding:24px}
+ .moment-tile strong{font-size:17px}
+ .moment-tile small{font-size:12px}
+ .activity,.notice-room{width:min(100%,640px);padding:14px 32px 32px}
+ .session h1,.activity h1,.notice-room>h1{font-size:38px}
+ .fidget-surface{max-width:420px}
+ .fidget-picker button{font-size:14px;min-height:48px;padding:12px 18px}
+ .activity .intro,.activity-instruction{font-size:15px}
+ .calm-module .activity-instruction{font-size:15px}
+ .room-practice .calm-module{width:min(100%,760px)}
+ .calm-module h2{font-size:34px}
+ .drawing-paper{max-height:420px}
+ .wind-down{width:min(100%,600px);max-width:600px;padding:24px 32px 36px}
+ .wind-down h1{font-size:38px}
+ .wind-down .intro{font-size:16px}
+ .wind-down textarea{font-size:16px;min-height:140px}
+ .room-ripple .activity{width:min(100%,920px);padding:16px 32px 32px}
+ .ripple-pond{height:clamp(300px,53svh,560px)}
+ dialog{width:min(calc(100% - 48px),560px);padding:28px;max-height:calc(100svh - 48px);overflow:auto}
+ .setting small,.setting-hint,.sound-options button small,.privacy p{font-size:12px}
+}
+@media(min-width:1024px){
+ .home-start{width:min(calc(100% - 64px),1040px);max-width:1040px;display:grid;grid-template-columns:minmax(260px,.9fr) minmax(0,1.1fr);column-gap:60px;row-gap:18px;text-align:left;align-content:center;margin:clamp(20px,7vh,90px) auto 24px;padding:0}
+ .home-start .interactive-bloom{grid-column:1;grid-row:1/6;width:100%;height:auto;min-height:340px;align-self:center;margin:0}
+ .home-start .mind-turntable{width:100%;height:300px}
+ .home-start .sculpture-controls{height:44px;margin-top:0}
+ .home-start h1{grid-column:2;font-size:clamp(34px,3.4vw,48px);margin:0;letter-spacing:-1.3px}
+ .home-start>.intro{grid-column:2;font-size:15px;margin:0;max-width:430px}
+ .home-start>.home-talk-card,.home-start>.home-start-grid{grid-column:2;margin:0}
+ .home-talk-card{padding:24px}
+ .home-talk-card>span{font-size:27px}
+ .home-talk-card small{font-size:13px}
+ .home-start-grid button{padding:22px 18px}
+ .home-start-grid strong{font-size:15px}
+ .home-start-grid small{font-size:12px}
+ .moment-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .moments-hub .moment-tile,.moments-hub .moment-tile:last-child{padding:22px 18px}
+ .chat-room{padding-top:20px}
+}
+@media(max-height:600px){
+ header,.room-talk header{height:64px}
+ .slide-entry{justify-content:flex-start;padding:18px 24px;gap:0}
+ .slide-entry .welcome-bloom{margin:-18px auto -20px;transform:scale(.65);height:110px}
+ .slide-entry h1{font-size:26px;margin:10px 0 6px}
+ .slide-entry>p{margin:0 0 16px}
+ .entry-key-hint{margin-top:10px}
+ .view-voice .voice-orb{width:100px;height:100px;margin:8px auto 12px}
+ .subtitle-box .subtitle-text{height:88px;min-height:88px;font-size:16px;padding:14px 18px}
+ .home-start{margin-top:8px}
+ .home-start .interactive-bloom{min-height:170px}
+ .home-start .mind-turntable{height:150px}
+ .guided-breath.breath-space{height:240px}
+ .room-nav{bottom:6px;padding:4px}
+ .room-nav button{min-height:48px}
+}
+@media(max-width:359px){
+ .header-left .brand{font-size:16px}
+ .fidget-picker{gap:4px}
+ .fidget-picker button{padding:9px 10px;font-size:11px;min-width:0}
+ .home-start-grid{gap:10px}
+ .home-start-grid button{min-width:0}
+ .moment-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .room-nav{width:calc(100% - 20px)}
+}
+@media(min-width:640px){
+ .view-chat .chat-transcript{min-height:180px;max-height:clamp(180px,calc(100svh - 540px),460px)}
+}
+/* Breathing is a practice library, with explicit cues instead of an ambiguous dot. */
+.breath-library{width:100%;min-width:0}.breath-techniques{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:18px 0}.breath-techniques button{min-width:0;padding:14px 12px;text-align:left;border:1px solid #fff6;border-radius:18px;background:#e4d3ee30;box-shadow:inset 0 1px #fff4}.breath-techniques button[aria-pressed=true]{background:#ae89c444;border-color:#9568b5;box-shadow:inset 0 1px #fff7,0 4px 14px #67458015}.breath-techniques strong{font-size:13px;display:block;font-weight:500}.breath-techniques small{display:block;font-size:10px;line-height:1.5;margin-top:5px;color:var(--muted)}.breath-practice-card{padding:20px 18px;border:1px solid #fff6;border-radius:26px;background:linear-gradient(140deg,#ebdef33b,#c9afd72a)}.breath-tradition{font-size:10px;color:var(--muted);letter-spacing:.3px}.breath-how{font-size:12px;line-height:1.8;text-align:left;margin:12px 0 0}.breath-visual{max-width:360px;margin:0 auto;color:var(--accent)}.breath-visual svg{display:block;width:100%;height:auto}.breath-visual text{font-family:inherit;font-size:12px;fill:currentColor}.nostril-idle{opacity:.25}.nostril-active{opacity:1}.belly-motion,.ribbon-motion{transition:all .1s linear}.breath-current{display:flex;flex-direction:column;align-items:center;gap:9px;min-height:85px}.breath-current strong{font:400 24px/1.35 Lora,Georgia,serif}.breath-current>span{font-size:12px;color:var(--muted);line-height:1.6}.breath-progress{display:flex;justify-content:space-between;gap:12px;margin:15px 0;font-size:10px;color:var(--muted)}.breath-controls{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}.breath-controls .primary{min-height:48px}.breath-controls .quiet-link{font-size:11px;min-height:44px}.breath-muted{display:block;font-size:10px;line-height:1.6;margin-top:12px;color:var(--muted)}.breath-comfort{font-size:10px;line-height:1.7;color:var(--muted);margin:18px 0 8px}.breath-source{font-size:10px;color:var(--muted);text-underline-offset:3px}.breath-next{margin:16px auto;min-height:44px;font-size:12px}.calm-module:has(.breath-library) .activity-footnote{display:none}@media(min-width:800px){.room-breathe .activity{width:min(100%,940px)}.room-breathe .breath-library{display:grid;grid-template-columns:230px minmax(0,1fr);gap:0 24px;align-items:start}.room-breathe .breath-library>.intro{grid-column:1/-1;margin:0 0 22px}.room-breathe .breath-techniques{grid-column:1;grid-row:2;grid-template-columns:1fr;margin:0}.room-breathe .breath-practice-card{grid-column:2;grid-row:2}.room-breathe .breath-next{grid-column:2}.breath-how{font-size:14px}.breath-techniques strong{font-size:15px}.breath-techniques small{font-size:12px}.breath-current>span{font-size:14px}.breath-comfort{font-size:11px}}[data-still=true] .belly-motion,[data-still=true] .ribbon-motion{transition:none}[data-still=true] .technique-belly ellipse{rx:52;ry:38}[data-still=true] .technique-belly path.belly-motion{transform:none}[data-still=true] .technique-ribbon .ribbon-motion{d:path('M25 145Q90 75 160 100T295 85')}@media(prefers-reduced-motion:reduce){.belly-motion,.ribbon-motion{transition:none}.technique-belly ellipse{rx:52;ry:38}.technique-belly path.belly-motion{transform:none}.technique-ribbon .ribbon-motion{d:path('M25 145Q90 75 160 100T295 85')}}
+.breath-instructions{text-align:left;margin-top:8px}.breath-instructions summary{font-size:12px;min-height:40px;display:flex;align-items:center;gap:8px;cursor:pointer;list-style:none}.breath-instructions summary:after{content:'+';margin-left:auto}.breath-instructions[open] summary:after{content:'−'}.breath-instructions .breath-how{margin:0 0 12px}.breath-visual{max-width:280px}.breath-visual svg{max-height:150px}.breath-current{min-height:70px}.breath-practice-card{padding:16px}.breath-techniques small{display:none}.breath-techniques button{min-height:48px}.breath-techniques{margin:12px 0}.breath-progress{margin:10px 0}@media(min-width:640px){.breath-techniques small{display:block}.breath-visual svg{max-height:190px}.breath-practice-card{padding:22px}.breath-current{min-height:85px}}
+@media(max-width:639px){.breath-visual svg{max-height:125px}.breath-current strong{font-size:21px}.breath-current{min-height:65px}.breath-tradition{font-size:9px}}
+/* A small visual vocabulary replaces repeated breathing prose. */
+.breath-techniques button{display:flex;align-items:center;gap:10px}.breath-techniques button svg{flex-shrink:0}.breath-techniques strong{font-size:12px}.breath-instructions{margin-top:0}.breath-instructions summary{justify-content:flex-end;min-height:36px}.breath-instructions summary:after{display:none}.breath-phase-symbol{display:flex;align-items:center;justify-content:center;gap:12px}.breath-phase-symbol strong{font-size:28px}.breath-count{font-variant-numeric:tabular-nums;font-size:26px;min-width:30px;padding:4px 8px;border-radius:12px;background:#ead8f24d}.breath-current{min-height:58px;gap:5px}.breath-rounds{display:flex;justify-content:center;gap:9px;margin:12px 0 20px}.breath-rounds>span{width:6px;height:6px;border-radius:50%;background:#9273aa30}.breath-rounds .filled{background:var(--accent)}.breath-start{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-width:125px}.breath-reset,.breath-music{width:46px;height:46px;padding:0;display:grid;place-items:center;border-radius:50%;border:1px solid #ffffff50;background:#e5d1ef25}.breath-symbol-key{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin:14px 0}.breath-symbol-key>span{display:flex;align-items:center;gap:5px}.breath-comfort{font-size:10px;margin:18px 0 6px}.breath-source{font-size:10px}@media(min-width:800px){.room-breathe .breath-techniques{grid-row:1}.room-breathe .breath-practice-card{grid-row:1}.breath-techniques strong{font-size:15px}}
+.realtime-voice{padding:22px;border:1px solid #fff5;background:#dcc5e837;border-radius:26px;text-align:center}.realtime-label{font-size:12px;color:var(--muted);margin:0}.realtime-caption{font:18px/1.6 Lora,Georgia,serif;min-height:80px;overflow-wrap:anywhere}.realtime-voice label{display:flex;text-align:left;gap:10px;font-size:12px;line-height:1.6;margin:18px 0}.voice-consent input{width:20px;height:20px;flex-shrink:0}.realtime-voice .voice-access{display:block}.voice-access input{display:block;width:100%;min-width:0;margin-top:8px;padding:12px;border:1px solid #fff7;border-radius:14px;background:#e8daf13d;color:var(--ink);font:inherit}.realtime-voice small{display:block;font-size:10px;color:var(--muted);line-height:1.7;margin:14px 0 0}

@@ -1,7 +1,7 @@
 import { readFile, access } from 'node:fs/promises';
 import vm from 'node:vm';
 import assert from 'node:assert/strict';
-const base = 'https://example.test/happy-mind/';
+const base = 'https://example.test/Happy-Mind/';
 const manifest = JSON.parse(await readFile('dist/manifest.webmanifest','utf8'));
 assert.equal(manifest.display,'standalone');
 for (const icon of manifest.icons) await access('dist/'+icon.src);
@@ -10,8 +10,8 @@ let online = true;
 const fetchAsset = async input => {
   if (!online) throw new Error('offline');
   const url = new URL(typeof input==='string'?input:input.url);
-  assert(url.pathname.startsWith('/happy-mind/'), 'asset must preserve repository base');
-  const relative = url.pathname.slice('/happy-mind/'.length) || 'index.html';
+  assert(url.pathname.startsWith('/Happy-Mind/'), 'asset must preserve repository base');
+  const relative = url.pathname.slice('/Happy-Mind/'.length) || 'index.html';
   return new Response(await readFile('dist/'+relative));
 };
 const cache = {
@@ -34,4 +34,4 @@ for(const url of entries.keys()) {
  handlers.fetch({request:{method:'GET',url,mode:url===base?'navigate':'cors'},respondWith:p=>result=p});
  assert.equal((await result).status,200, 'cached asset should work offline: '+url);
 }
-console.log(`PWA asset/cache checks passed: ${entries.size} resources under /happy-mind/. Browser/device offline validation remains required.`);
+console.log(`PWA asset/cache checks passed: ${entries.size} resources under /Happy-Mind/. Browser/device offline validation remains required.`);

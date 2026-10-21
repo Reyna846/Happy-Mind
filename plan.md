@@ -1,7 +1,9 @@
-# Local voice response diagnosis
-- Goal: prepared PWA voice must submit and show replies, with useful progress/failure states.
-- Evidence: real desktop model preparation and structured typed reply succeeded. User reports large Let’s talk reaches Taking a moment, isolating generation path; exact phone hardware unknown.
-- Approach: local Voice uses short plain-text generation (120 output tokens, compact prompt, streamed captions) instead of nested JSON/action grammar. Chat keeps structured actions. Retain prepared engine on background; fix single-mic auto-send, duplicate-interim timeout and explicit Finish & reply fallback. Distinct download/GPU/timeout/reply messages.
-- Verification: dictation exactly-once/error/Chat-draft tests, VoiceLoop stable-interim/manual-finish regressions, status tests, build and real local generation. Physical PWA voice/audio remains open.
+Goal: modernize button styling without losing readability/accessibility.
+Scope: shared control hierarchy, guide actions, selectors, focus/hover/pressed/disabled states; preserve navigation and behavior.
+Approach: one focused final stylesheet for control tokens; plum primary, soft glass secondary, selected chips and restrained focus halo. Improve guide action grouping with icons.
+Risks: conflicting legacy specificity, narrow-screen wrapping and bedtime contrast.
+Verification: production build; phone/desktop screenshots of Talk, Breathe, tools and Settings; minimum-target/overflow checks.
 
-- Result: real desktop simplified local Voice response/subtitles succeeded, as did original structured typed generation. Actual installed PWA mic/TTS not reproducible here. Changes local; installed deployment needs update.
+Result: shared control finish and guide hierarchy implemented; production build/PWA cache check pass. Mobile and desktop browser inspection completed; screenshots in docs/.
+
+Follow-up: refined Talk/Chat icons and smooth swipe ribbon; removed OpenAI provider choice. Build/PWA/carousel/ribbon checks pass; browser swipe and local-only choices verified.

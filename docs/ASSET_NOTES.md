@@ -29,3 +29,6 @@ Moon: generated original transparent five-expression strip in `art/moon/sleepy-m
 
 ## Cat PWA icon
 PWA/favicon icons reuse the existing CatCompanion face/gradients, centred on opaque lavender with maskable-safe padding. public/icon.svg is the vector source; PNG outputs are192/512px and180px Apple touch icon. Manifest512 advertises any/maskable. Service worker precaches all icon files. No new generated character art.
+
+### Bundled spoken guides
+`public/audio/guides/*.wav`: eleven original scripted cues generated locally with Kokoro 82M / `af_heart`, speed 0.9, using `scripts/generate-guides.mjs`. Model/library Apache-2.0; source https://huggingface.co/onnx-community/Kokoro-82M-v1.0-ONNX . Scripts avoid promises of treatment or instructions to hold/force breathing. These are synthetic speech, not recordings of a human speaker. Phase cues are under 3.5 seconds; production SW precaches all clips. No personal conversation was used to generate assets.

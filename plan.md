@@ -1,9 +1,7 @@
-Goal: modernize button styling without losing readability/accessibility.
-Scope: shared control hierarchy, guide actions, selectors, focus/hover/pressed/disabled states; preserve navigation and behavior.
-Approach: one focused final stylesheet for control tokens; plum primary, soft glass secondary, selected chips and restrained focus halo. Improve guide action grouping with icons.
-Risks: conflicting legacy specificity, narrow-screen wrapping and bedtime contrast.
-Verification: production build; phone/desktop screenshots of Talk, Breathe, tools and Settings; minimum-target/overflow checks.
+Goal: local-only onboarding without provider settings, and reliable PWA update visibility.
+Scope: remove demo samples/provider chooser; inspect actual WebLLM cache, prompt once on first entry when missing, initialize cached models automatically; repair stale navigation/update UX. Global-settings scope pending user clarification.
+Approach: explicit download consent, no localStorage installed flag, empty transcript; cached warm-up without install buttons; retry only on failure. Network-first online navigation and explicit update/restart notice preserve current conversations until approval.
+Risks: cache eviction/incomplete files, unsupported WebGPU, reload clears in-memory words. No automatic model download or destructive automatic reload.
+Verification: cache-detection tests, SW online/offline/update tests, build and browser cached path + provider-free screens.
 
-Result: shared control finish and guide hierarchy implemented; production build/PWA cache check pass. Mobile and desktop browser inspection completed; screenshots in docs/.
-
-Follow-up: refined Talk/Chat icons and smooth swipe ribbon; removed OpenAI provider choice. Build/PWA/carousel/ribbon checks pass; browser swipe and local-only choices verified.
+Result: both uncached and cached startup verified in browser; demo/provider controls removed; general Settings retained. Build/cache/startup tests pass. Live remains previous upload until src/public changes are uploaded and deployed.

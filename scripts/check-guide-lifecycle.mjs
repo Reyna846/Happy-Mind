@@ -1,0 +1,15 @@
+import {readFile} from 'node:fs/promises';
+import {transform} from 'esbuild';
+import assert from 'node:assert/strict';
+const effects=[],notices=[],audio=[];const win=new EventTarget(),doc=new EventTarget();doc.hidden=false;globalThis.window=win;globalThis.document=doc;
+globalThis.guideHooks={useRef:value=>({current:value}),useState:()=>['',v=>notices.push(v)],useCallback:fn=>fn,useEffect:fn=>effects.push(fn)};
+globalThis.Audio=class{src='';paused=true;currentTime=0;constructor(){audio.push(this);}pause(){this.paused=true;}play(){this.paused=false;return new Promise((resolve,reject)=>{this.resolve=resolve;this.reject=reject;});}};
+let duck=false;win.addEventListener('hm-guide-audio',e=>duck=e.detail);
+const source=(await readFile('src/useGuideAudio.ts','utf8')).replace("import {useCallback,useEffect,useRef,useState} from 'react';","const {useCallback,useEffect,useRef,useState}=globalThis.guideHooks;").replace("import.meta.env.BASE_URL","'/Happy-Mind/'");
+const {code}=await transform(source,{loader:'ts',format:'esm'});const {useGuideAudio,stopGuides}=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
+const guide=useGuideAudio({active:true,sound:true,volume:.4});const cleanup=effects.map(fn=>fn());guide.play('look');assert.equal(audio[0].src,'/Happy-Mind/audio/guides/look.wav');assert.equal(audio[0].volume,.4);assert(duck);
+stopGuides();assert(audio[0].paused);assert(!duck);audio[0].reject();await Promise.resolve();assert(!notices.some(Boolean),'cancelled play is not an error');
+guide.play('feel');doc.hidden=true;doc.dispatchEvent(new Event('visibilitychange'));assert(audio[0].paused);assert(!duck);
+const before=audio.length;guide.play('listen');assert.equal(audio.length,before);doc.hidden=false;guide.play('listen');audio[0].reject();await Promise.resolve();assert(!duck);assert.match(notices.at(-1),/could not play/);
+for(const fn of cleanup)fn?.();assert(audio[0].paused);
+console.log('Guide lifecycle checks passed: user playback, volume, ducking, interruption, hidden-page stop, stale error suppression and cleanup.');

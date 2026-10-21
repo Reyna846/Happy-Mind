@@ -5,5 +5,5 @@ const basic=voice('Basic'),natural=voice('Jenny Natural'),french=voice('French N
 assert.equal(chooseVoice([basic,natural,french],'','en-IN'),natural);
 assert.equal(chooseVoice([basic,natural],basic.voiceURI,'en-US'),basic);
 assert.equal(chooseVoice([], '', 'en-US'),undefined);
-assert.equal(chooseVoice([french,basic],'','fr-FR'),french);
+assert.equal(chooseVoice([french,basic],french.voiceURI,'fr-FR'),basic);
 console.log('Voice checks passed: saved override, natural/language fallback, empty voices.');

@@ -112,3 +112,61 @@ textarea{max-width:100%}
 /* A small visual vocabulary replaces repeated breathing prose. */
 .breath-techniques button{display:flex;align-items:center;gap:10px}.breath-techniques button svg{flex-shrink:0}.breath-techniques strong{font-size:12px}.breath-instructions{margin-top:0}.breath-instructions summary{justify-content:flex-end;min-height:36px}.breath-instructions summary:after{display:none}.breath-phase-symbol{display:flex;align-items:center;justify-content:center;gap:12px}.breath-phase-symbol strong{font-size:28px}.breath-count{font-variant-numeric:tabular-nums;font-size:26px;min-width:30px;padding:4px 8px;border-radius:12px;background:#ead8f24d}.breath-current{min-height:58px;gap:5px}.breath-rounds{display:flex;justify-content:center;gap:9px;margin:12px 0 20px}.breath-rounds>span{width:6px;height:6px;border-radius:50%;background:#9273aa30}.breath-rounds .filled{background:var(--accent)}.breath-start{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-width:125px}.breath-reset,.breath-music{width:46px;height:46px;padding:0;display:grid;place-items:center;border-radius:50%;border:1px solid #ffffff50;background:#e5d1ef25}.breath-symbol-key{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin:14px 0}.breath-symbol-key>span{display:flex;align-items:center;gap:5px}.breath-comfort{font-size:10px;margin:18px 0 6px}.breath-source{font-size:10px}@media(min-width:800px){.room-breathe .breath-techniques{grid-row:1}.room-breathe .breath-practice-card{grid-row:1}.breath-techniques strong{font-size:15px}}
 .realtime-voice{padding:22px;border:1px solid #fff5;background:#dcc5e837;border-radius:26px;text-align:center}.realtime-label{font-size:12px;color:var(--muted);margin:0}.realtime-caption{font:18px/1.6 Lora,Georgia,serif;min-height:80px;overflow-wrap:anywhere}.realtime-voice label{display:flex;text-align:left;gap:10px;font-size:12px;line-height:1.6;margin:18px 0}.voice-consent input{width:20px;height:20px;flex-shrink:0}.realtime-voice .voice-access{display:block}.voice-access input{display:block;width:100%;min-width:0;margin-top:8px;padding:12px;border:1px solid #fff7;border-radius:14px;background:#e8daf13d;color:var(--ink);font:inherit}.realtime-voice small{display:block;font-size:10px;color:var(--muted);line-height:1.7;margin:14px 0 0}
+
+/* Home circles are entry choices; the bottom bar stays the page navigation. */
+.home-start>.room-carousel{margin:10px 0 0}
+.home-start>.quiet-link{margin:4px auto 0;display:flex;align-items:center;gap:8px}
+@media(min-width:1024px){
+ .home-start>.room-carousel,.home-start>.quiet-link{grid-column:2}
+ .home-start>.room-carousel{--room-size:154px;--room-gap:20px;max-width:100%}
+ .home-start>.quiet-link{justify-self:center}
+}
+
+/* Audit baseline: readable labels, comfortable targets and consistent focus. */
+:root,[data-mood=lake],[data-mood=dusk],[data-mood=sand]{--ink:#3f294f;--muted:#493255}
+button,summary,select{min-height:44px;min-width:44px}
+button,select,textarea,input{font-family:'DM Sans',sans-serif}
+select,textarea,input:not([type=range]):not([type=checkbox]){font-size:16px}
+button:focus-visible,a:focus-visible,summary:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,[tabindex="0"]:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.quiet-link,.module-button,.mode-chip,.conversation-mode-row .mode-chip,.companion-options,.chat-room .companion-options,.fidget-picker button,.notice-choices button,.breath-controls .quiet-link,.breath-next{font-size:14px}
+.intro,.activity-instruction,.calm-module .activity-instruction,.chat-room .message p{font-size:16px;line-height:1.65}
+.moment-tile small,.setting small,.setting-hint,.sound-options button small,.privacy p,.voice-settings small,.breath-comfort,.breath-source,.breath-tradition,.breath-muted,.wind-down>small,.night-cues small,.night-notes,.practice-feedback a,.chat-notice,.module-heading>span,.room-nav button span,.room-talk .room-nav button span,.creations-heading,.creation-card p{font-size:12px;line-height:1.6}
+.moment-tile strong,.sound-options button strong{font-size:15px}
+.room-nav button span{white-space:nowrap}
+.primary,.module-button,.view-voice .hands-free-button,.send-message,.room-nav button[aria-current=page]{background:linear-gradient(135deg,#79549a,#684482);color:#fff}
+.primary:disabled,.send-message:disabled{opacity:.5}
+.drawing-actions,.practice-feedback{flex-wrap:wrap;gap:8px}
+.drawing-actions .quiet-link,.practice-feedback .quiet-link{font-size:14px;padding:10px 8px}
+.ink-options button,.module-heading .icon-button,.header-back,.voice-secondary .icon-button{width:44px;height:44px;min-width:44px}
+.practice-feedback a,.breath-source,.night-notes a{display:inline-flex;align-items:center;min-height:44px;text-underline-offset:3px}
+.breath-instructions summary{min-height:44px}
+.voice-settings{gap:10px}.voice-settings select{background:#e4d4ec55;border:1px solid #79549a80;color:var(--ink);max-width:100%}
+.voice-settings small{line-height:1.7}
+.room-winddown{--ink:#f3eafa;--muted:#ede0f6}
+.room-winddown .landscape{background:radial-gradient(ellipse at 50% 6%,#736384,#584b6b 58%,#443b55)!important}
+.room-winddown dialog{--ink:#3f294f;--muted:#493255}
+.room-winddown .quiet-link,.room-winddown .night-notes{color:var(--muted)}
+.room-winddown .night-actions{flex-wrap:wrap}
+@media(max-width:359px){
+ .fidget-picker{flex-wrap:wrap}.fidget-picker button{flex:1 0 42%;font-size:14px}
+ .conversation-mode-row .mode-chip{padding:8px 10px}.chat-room .companion-options{padding:8px;font-size:12px}
+ .room-nav button span{font-size:11px}.drawing-actions .ink-options{width:100%;justify-content:center}
+}
+.activity-open .conversation-mode-row{position:relative;top:auto}
+@media(hover:hover){.moment-tile:hover,.fidget-picker button:hover,.notice-choices button:hover{background:#e8d9f16b}}
+.quiet-link{border-radius:16px}
+@media(max-width:639px){
+ .drawing-actions .ink-options{flex:1 0 100%;justify-content:center}
+ .drawing-actions>.quiet-link{flex:1 1 120px}
+}
+.guide-toggle{gap:8px;padding:9px 14px;border:1px solid #fff6;background:#e6d5ef35}
+.guide-toggle[aria-pressed=true]{background:#79549a;color:white}
+.guide-notice,.offline-mic-control small{font-size:12px;line-height:1.6;display:block}
+.quick-grounding{margin:18px 0;text-align:left;border:1px solid #fff5;border-radius:20px;padding:4px 14px;background:#e4d1ef25}
+.quick-grounding summary{cursor:pointer;display:flex;align-items:center;gap:8px;min-height:48px;font-size:14px}
+.quick-grounding p{font:18px/1.6 Lora,Georgia,serif;margin:12px 0}
+.quick-grounding>div{display:flex;flex-wrap:wrap;gap:8px}.quick-grounding small{font-size:12px}
+.offline-mic-settings{display:flex;flex-direction:column;gap:8px;border-top:1px solid #79549a30;padding-top:14px;margin-top:10px}
+.offline-mic-control{flex:1;min-width:0}.offline-mic-control .hands-free-button{width:100%}
+.offline-mic-control.compact{flex:none;max-width:180px}.offline-mic-control.compact small{max-width:150px}
+.offline-mic-control .quiet-link{font-size:12px}.notice-room>.guide-toggle{margin:0 auto 14px}

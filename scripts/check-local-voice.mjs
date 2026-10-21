@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import {transform} from 'esbuild';
+const workers=[];const nodes=[];
+globalThis.localStorage={getItem:()=> 'heart'};
+globalThis.Worker=class{constructor(){workers.push(this);}postMessage(data){this.last=data;}terminate(){this.dead=true;}reply(data){this.onmessage({data:{id:this.last.id,...data}});}};
+globalThis.AudioContext=class{state='running';destination={};resume(){return Promise.resolve();}createBuffer(){return {copyToChannel(){}};}createGain(){return {gain:{value:0},connect(){},disconnect(){}};}createBufferSource(){const node={connect(){},disconnect(){},start(){nodes.push(this);},stop(){this.stopped=true;}};return node;}};
+const code=await transform((await fs.readFile('src/local-voice.ts','utf8')).replace("new URL('./kokoro-worker.ts',import.meta.url)","'test-worker'"),{loader:'ts',format:'esm'});
+const voice=await import('data:text/javascript;base64,'+Buffer.from(code.code).toString('base64'));
+const prepared=voice.prepareHeart();workers[0].reply({type:'ready'});await prepared;assert(voice.heartReady());
+let started=0,ended=0;
+const stale=voice.speakHeart('A quiet moment.',.5,()=>true,()=>started++,()=>ended++);
+voice.stopHeart();workers[0].reply({type:'audio',samples:[0,.1,0],rate:24000});await stale;assert.equal(started,0);
+const current=voice.speakHeart('A quiet moment.',.5,()=>true,()=>started++,()=>ended++);
+workers[0].reply({type:'audio',samples:[0,.1,0],rate:24000});await current;assert.equal(started,1);nodes[0].onended();assert.equal(ended,1);
+const interrupted=voice.speakHeart('Again.',.5,()=>true,()=>started++,()=>ended++);workers[0].reply({type:'audio',samples:[0,0],rate:24000});await interrupted;voice.stopHeart();assert(nodes[1].stopped);assert.equal(nodes[1].onended,null);
+const pending=voice.speakHeart('Stop.',.5,()=>true,()=>{},()=>{});voice.resetHeart();await assert.rejects(pending);assert.equal(voice.heartReady(),false);
+console.log('Local voice checks passed: prepare, stale generation, playback, interruption, reset.');

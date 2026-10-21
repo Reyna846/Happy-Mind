@@ -4,7 +4,7 @@ type Options={create:()=>RecognitionLike;onWords:(words:string)=>void;onTurn:(wo
 export class VoiceLoop {
  private options:Options;private current:RecognitionLike|null=null;private timer:ReturnType<typeof setTimeout>|null=null;private active=false;private paused=false;private waiting=false;private text='';private emptyEnds=0;
  constructor(options:Options){this.options=options;}
- private later(fn:()=>void,ms:number){return (this.options.delay||setTimeout)(fn,ms);}
+ private later(fn:()=>void,ms:number){return this.options.delay?this.options.delay(fn,ms):setTimeout(fn,ms);}
  private clearTimer(){if(this.timer!==null)(this.options.cancel||clearTimeout)(this.timer);this.timer=null;}
  private release(){this.clearTimer();const old=this.current;this.current=null;old?.abort();}
  start(){this.stop();this.active=true;this.paused=false;this.waiting=false;this.emptyEnds=0;this.listen();}

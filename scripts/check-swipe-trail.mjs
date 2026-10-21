@@ -1,0 +1,14 @@
+import {transform} from 'esbuild';
+import {readFile} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+let now=0,cursor=0,effect,rendered=[],less=false,id=0;const refs=[],frames=new Map();
+globalThis.performance={now:()=>now};globalThis.document={documentElement:{dataset:{}}};globalThis.window={matchMedia:()=>({matches:less})};
+globalThis.requestAnimationFrame=fn=>{frames.set(++id,fn);return id;};globalThis.cancelAnimationFrame=i=>frames.delete(i);
+globalThis.trailHooks={useId:()=> 'trail-test',useRef:v=>refs[cursor++]??(refs[cursor-1]={current:v}),useState:()=>[[],v=>rendered=v],useEffect:fn=>effect=fn};
+let source=(await readFile('src/SwipeTrail.tsx','utf8')).replace("import {useEffect,useId,useRef,useState} from 'react';","const {useEffect,useId,useRef,useState}=globalThis.trailHooks;");
+const {code}=await transform(source,{loader:'tsx',format:'esm',jsx:'transform'});const {SwipeTrail}=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
+const tick=delta=>{now+=delta;const queued=[...frames.values()];frames.clear();for(const fn of queued)fn(now);};
+SwipeTrail({contact:{x:0,y:0},active:true});let cleanup=effect();tick(16);refs[0].current={x:180,y:100};tick(16);assert(rendered.at(-1).x>0&&rendered.at(-1).x<180,'head eases toward contact');for(let i=0;i<40;i++)tick(16);assert(rendered.length<=28);
+cleanup();cursor=0;SwipeTrail({contact:null,active:false});cleanup=effect();for(let i=0;i<30;i++)tick(16);assert.equal(rendered.length,0);assert.equal(frames.size,0,'released ribbon retires its frame loop');cleanup();
+less=true;cursor=0;SwipeTrail({contact:{x:30,y:40},active:true});effect();assert.equal(frames.size,0);assert.equal(rendered.length,0);
+console.log('Swipe ribbon checks passed: eased head, bounded samples, release decay, frame cleanup and reduced-motion guard.');

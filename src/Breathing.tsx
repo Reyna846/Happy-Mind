@@ -1,0 +1,8 @@
+import {useEffect,useState} from 'react';
+import {breathDuration,breathState} from './breath-timing';
+export function Breathing({paused,onPause,onNext}:{paused:boolean;onPause:()=>void;onNext:()=>void}){
+ const [elapsed,setElapsed]=useState(0),[hidden,setHidden]=useState(document.hidden);const breath=breathState(elapsed);
+ useEffect(()=>{const change=()=>setHidden(document.hidden);document.addEventListener('visibilitychange',change);return()=>document.removeEventListener('visibilitychange',change);},[]);
+ useEffect(()=>{if(paused||hidden||breath.done)return;let last=performance.now();const timer=setInterval(()=>{const now=performance.now(),delta=(now-last)/1000;last=now;setElapsed(t=>Math.min(breathDuration,t+delta));},100);return()=>clearInterval(timer);},[paused,hidden,breath.done]);
+ return <div className="breathing-practice"><div className={'breath-space guided-breath '+(paused?'paused':'')+(breath.done?' breath-finished':'')}><div className="breath-orb" style={{transform:`scale(${breath.scale})`}}/><div className="breath-label"><span>{paused&&!breath.done?'Rest here':breath.phase}</span>{!breath.done&&<strong aria-hidden="true">{breath.count}</strong>}</div></div><div className="breath-actions">{breath.done?<><p role="status">You made a little space for yourself.</p><button className="primary" onClick={()=>setElapsed(0)}>One more moment</button></>:<button className="primary" onClick={onPause}>{paused?'Resume':'Pause'}</button>}<button className="quiet-link" onClick={onNext}>Find your centre →</button></div><span className="sr-only" role="status">{breath.done?'Good job. You made a little space for yourself.':paused?'Breathing paused.':breath.phase==='Ready'?'Get comfortable. Breathing begins in two seconds.':''}</span></div>;
+}

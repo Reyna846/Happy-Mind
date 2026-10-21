@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {restingRotation,turnSculpture,sculptureBlend,smoothBlend} from '../src/sculpture-motion.ts';
+const turned=turnSculpture(restingRotation,100,40);
+assert.ok(turned.y>restingRotation.y);assert.ok(turned.x>restingRotation.x);
+assert.equal(turnSculpture(restingRotation,0,100000).x,1.35);
+assert.equal(turnSculpture(restingRotation,0,-100000).x,-1.35);
+assert.ok(turnSculpture(restingRotation,1000,0).y>Math.PI*2);
+const approach=(step,count)=>{let n=0;for(let i=0;i<count;i++)n=sculptureBlend(n,1,step);return n;};
+assert.ok(Math.abs(approach(.02,50)-approach(.05,20))<1e-10);
+assert.equal(sculptureBlend(.4,1,0),.4);
+assert.equal(smoothBlend(.2,.8,0),0);assert.equal(smoothBlend(.2,.8,1),1);
+assert.ok(Math.abs(smoothBlend(.2,.8,.5)-.5)<1e-10);
+console.log('Sculpture checks passed: drag axes, pitch bounds, full yaw, frame-independent easing and blend endpoints.');

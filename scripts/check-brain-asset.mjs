@@ -1,0 +1,10 @@
+import {readFile} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import * as THREE from 'three';
+const bytes=await readFile('public/models/brain-anatomy.glb');
+assert.equal(bytes.readUInt32LE(0),0x46546c67);assert.equal(bytes.readUInt32LE(8),bytes.length);
+const asset=await new GLTFLoader().parseAsync(bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength),'');
+let vertices=0,meshes=0;asset.scene.traverse(o=>{if(o instanceof THREE.Mesh){meshes++;vertices+=o.geometry.attributes.position.count;assert.ok(o.geometry.index.count>0);assert.ok(o.geometry.attributes.normal);o.geometry.dispose();for(const m of Array.isArray(o.material)?o.material:[o.material]){assert.equal(m.map,null);m.dispose();}}});
+assert.equal(meshes,5);assert.equal(vertices,7353);const size=new THREE.Box3().setFromObject(asset.scene).getSize(new THREE.Vector3());assert.ok(size.x>.1&&size.y>.1&&size.z>.1);assert.ok(bytes.length<350000);
+console.log('Brain GLB checks passed: loader parses five anatomical meshes, 7353 vertices/normals, valid bounds and 315KB geometry-only asset.');

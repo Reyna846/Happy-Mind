@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import {partialReply} from '../src/reply-stream.ts';
+import {releasedIndex,resistPosition} from '../src/carousel-motion.ts';
+assert.equal(resistPosition(-100,400),-25);assert.equal(resistPosition(500,400),425);
+assert.equal(releasedIndex(0,60,200,0,3),1);assert.equal(releasedIndex(1,190,200,0,3),1);
+assert.equal(releasedIndex(1,180,200,-.8,3),0);assert.equal(releasedIndex(2,490,200,1,3),2);
+assert.equal(partialReply('{"reply":"Hello'), 'Hello');
+assert.equal(partialReply('{"artifact":{"reply":"hidden"},"reply":"Visible'), 'Visible');
+assert.equal(partialReply('{"artifact":{"reply":"hidden'), '');
+assert.equal(partialReply('{"reply":"A\\nB\\u263a'), 'A\nB☺');
+assert.equal(partialReply('{"reply":"A\\u26'), 'A');
+assert.equal(partialReply('{"reply":"A\\'), 'A');
+assert.equal(partialReply('{"reply":42}'), '');
+const raw=JSON.stringify({artifact:{title:'"reply":"fake'},reply:'You can say "hello". 🌸'});
+for(let i=1;i<=raw.length;i++)assert.ok('You can say "hello". 🌸'.startsWith(partialReply(raw.slice(0,i))));
+assert.equal(partialReply('x'.repeat(2000)).length,1200);
+console.log('Living UI checks passed: gesture thresholds, edge resistance, progressive JSON replies, escaped and nested content.');

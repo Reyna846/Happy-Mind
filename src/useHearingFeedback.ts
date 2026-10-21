@@ -1,0 +1,8 @@
+import { useEffect, useRef } from 'react';
+export function useHearingFeedback(active:boolean,still:boolean){const element=useRef<HTMLButtonElement>(null),available=useRef(true);
+ useEffect(()=>{if(!available.current||!active||still||!navigator.mediaDevices?.getUserMedia)return;let cancelled=false,stream:MediaStream|null=null,context:AudioContext|null=null,frame=0,last=0;
+ const stop=()=>{cancelled=true;cancelAnimationFrame(frame);stream?.getTracks().forEach(t=>t.stop());if(context&&context.state!=='closed')void context.close().catch(()=>{});element.current?.style.setProperty('--hearing','0');};
+ const hidden=()=>{if(document.hidden)stop();};document.addEventListener('visibilitychange',hidden);
+ void navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}}).then(async captured=>{if(cancelled){captured.getTracks().forEach(t=>t.stop());return;}stream=captured;context=new AudioContext();const source=context.createMediaStreamSource(stream),analyser=context.createAnalyser();analyser.fftSize=256;source.connect(analyser);const data=new Uint8Array(analyser.fftSize);await context.resume();if(cancelled)return;const measure=(now:number)=>{if(cancelled)return;if(now-last>32){last=now;analyser.getByteTimeDomainData(data);const rms=Math.sqrt(data.reduce((sum,v)=>sum+((v-128)/128)**2,0)/data.length);const level=Math.min(1,Math.max(0,(rms-.012)*9));element.current?.style.setProperty('--hearing',level.toFixed(3));}frame=requestAnimationFrame(measure);};frame=requestAnimationFrame(measure);}).catch(()=>{if(!cancelled){available.current=false;stop();}});
+ return()=>{document.removeEventListener('visibilitychange',hidden);stop();};
+ },[active,still]);return element;}

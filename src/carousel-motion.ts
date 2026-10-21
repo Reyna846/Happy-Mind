@@ -1,0 +1,2 @@
+export function resistPosition(value:number,max:number){return value<0?value*.25:value>max?max+(value-max)*.25:value;}
+export function releasedIndex(start:number,position:number,step:number,velocity:number,count:number){const travel=position-start*step;const next=Math.abs(velocity)>.45&&Math.abs(travel)>8?start+Math.sign(velocity):Math.abs(travel)>step*.22?start+Math.sign(travel):start;return Math.max(0,Math.min(count-1,next));}

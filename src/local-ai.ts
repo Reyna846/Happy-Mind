@@ -26,3 +26,5 @@ export function boundedMessages(messages:Message[]):Message[]{
   while(recent[0]?.role==='assistant')recent.shift();
   return recent;
 }
+
+export async function localModelCached(){const {hasModelInCache}=await import('@mlc-ai/web-llm');return hasModelInCache('Qwen2.5-1.5B-Instruct-q4f16_1-MLC');}

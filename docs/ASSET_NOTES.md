@@ -26,3 +26,6 @@ Brain now uses distinct hemispheres with irregular raised winding gyri and lower
 ## Rebuilt moon and imported brain
 Rejected procedural brain replaced with local `models/brain-anatomy.glb`: Innerscene CC0 brain with cerebral/cerebellar hemispheres, brainstem and embedded metadata. Source/license recorded in `public/models/CREDITS.md`. Optimized to 315KB by removing unused colour textures; all 7,353 vertices retained; local fetch is abortable, textures/geometry disposed including late completion. Retains real 3D dragging and pink tint.
 Moon: generated original transparent five-expression strip in `art/moon/sleepy-moon-strip.png` (awake, drowsy, yawn, sleep, deeper sleep). CSS frame windows preserve alignment, crossfade rather than morph tiny line paths, slow drift per stage; reduced motion uses static expressions. Generated via built-in imagegen, not a third-party image.
+
+## Cat PWA icon
+PWA/favicon icons reuse the existing CatCompanion face/gradients, centred on opaque lavender with maskable-safe padding. public/icon.svg is the vector source; PNG outputs are192/512px and180px Apple touch icon. Manifest512 advertises any/maskable. Service worker precaches all icon files. No new generated character art.

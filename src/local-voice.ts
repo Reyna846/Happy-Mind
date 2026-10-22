@@ -34,11 +34,20 @@ export function unlockHeart(){
  context??=new AudioContext();void context.resume().catch(()=>{});
 }
 export function stopHeart(){playbackEpoch++;output?.disconnect();output=undefined;if(source){source.onended=null;source.stop();source.disconnect();source=undefined;}}
+export type HeartAudio={samples:Float32Array;rate:number};
+export async function synthesizeHeart(text:string):Promise<HeartAudio>{
+ if(!ready)throw new Error('Prepare Heart in Settings → Sound first.');
+ return request('speak',text);
+}
 export async function speakHeart(text:string,volume:number,isCurrent:()=>boolean,onStart:()=>void,onEnd:()=>void){
  const epoch=playbackEpoch;
- if(!ready)throw new Error('Prepare Heart in Settings → Sound first.');
- const data=await request('speak',text);
+ const data=await synthesizeHeart(text);
  if(epoch!==playbackEpoch||!isCurrent())return;
+ return playHeartAudio(data,volume,isCurrent,onStart,onEnd);
+}
+export async function playHeartAudio(data:HeartAudio,volume:number,isCurrent:()=>boolean,onStart:()=>void,onEnd:()=>void){
+ const epoch=playbackEpoch;
+ if(!isCurrent())return;
  unlockHeart();await context!.resume();
  if(epoch!==playbackEpoch||!isCurrent())return;
  if(context!.state!=='running')throw new Error('Tap Preview in Sound settings to enable audio.');

@@ -1,6 +1,8 @@
 import { KokoroTTS } from 'kokoro-js';
 let model: KokoroTTS | undefined;
-self.onmessage = async ({data}) => {
+let tasks=Promise.resolve();
+self.onmessage = ({data}) => {tasks=tasks.then(()=>handle(data));};
+async function handle(data:{id:number;type:string;text:string}) {
  try {
   if (data.type === 'prepare') {
    model = await KokoroTTS.from_pretrained('onnx-community/Kokoro-82M-v1.0-ONNX', {dtype:'q8',device:'wasm'});
@@ -12,4 +14,4 @@ self.onmessage = async ({data}) => {
    self.postMessage({id:data.id,type:'audio',samples:result.audio,rate:result.sampling_rate});
   }
  } catch { self.postMessage({id:data.id,type:'error'}); }
-};
+}

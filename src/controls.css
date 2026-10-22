@@ -116,3 +116,23 @@ button:focus-visible{outline:2px solid var(--control-focus);outline-offset:3px}
 .model-install::backdrop{background:#3d234d50;backdrop-filter:blur(12px)}
 .model-install h2{font:28px/1.25 Lora,Georgia,serif;margin:0 0 16px}.model-install p{font-size:14px;line-height:1.7}.model-install>div{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:20px}
 .local-model-status{font-size:12px;line-height:1.6}.app-update{position:fixed;z-index:250;bottom:100px;left:50%;transform:translateX(-50%);width:min(90%,440px);padding:18px 22px;background:#e6d7f2f5;border:1px solid #fff9;border-radius:24px;box-shadow:0 12px 40px #43245440;color:#3f294f}.app-update p{font-size:14px;margin:0 0 12px}.app-update small{display:block;margin-top:10px}
+/* Conversation feedback stays compact and distinct from transcript content. */
+.conversation-status{display:flex;justify-content:center;align-items:center;gap:10px;min-height:36px;margin:6px 0 14px;color:var(--ink);font:500 14px/1.4 'DM Sans',sans-serif;text-align:center}
+.status-mark{display:inline-flex;align-items:center;justify-content:center;gap:3px;width:24px;height:24px;flex:none;color:#70488e}
+.status-mark i{display:block;width:4px;height:4px;border-radius:8px;background:currentColor}
+.conversation-status[data-phase=listening] .status-mark i{animation:conversation-listen 2.4s ease-in-out infinite}
+.conversation-status:is([data-phase=thinking],[data-phase=transcribing],[data-phase=voice],[data-phase=interrupting],[data-phase=opening],[data-phase=loading]) .status-mark i{animation:conversation-wait 1.8s ease-in-out infinite}
+.conversation-status[data-phase=speaking] .status-mark i{animation:conversation-listen 1s ease-in-out infinite}
+.conversation-status .status-mark i:nth-child(2){animation-delay:.18s}.conversation-status .status-mark i:nth-child(3){animation-delay:.36s}
+@keyframes conversation-listen{0%,100%{height:5px;opacity:.65}50%{height:17px;opacity:1}}
+@keyframes conversation-wait{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
+.voice-orb[data-phase=transcribing] .orb-ring{animation:conversation-turn 12s linear infinite}.voice-orb[data-phase=opening]{opacity:.8}
+@keyframes conversation-turn{to{transform:rotate(360deg)}}
+.last-words{display:flex;align-items:center;gap:12px;width:100%;text-align:left;margin:10px 0 0;padding:8px 14px;border:1px solid #ffffff50;border-radius:18px;background:#f0e4f31a}
+.last-words>div{flex:1;min-width:0}.last-words small{font-size:10px;letter-spacing:.06em;color:var(--muted)}.last-words p{margin:4px 0;color:var(--ink);font-size:14px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.last-words .quiet-link,.edit-words{min-height:44px;flex:none;font-size:13px;text-decoration:underline;text-underline-offset:4px}
+.transcript-editor{padding:20px;border:1px solid #ffffff70;border-radius:24px;background:linear-gradient(145deg,#f3e8f64d,#e1cee933);box-shadow:inset 0 1px #fff7;margin:12px 0 24px}
+.transcript-editor label{display:block;font-weight:600;font-size:16px;margin-bottom:12px}.transcript-editor textarea{box-sizing:border-box;width:100%;min-height:140px;max-height:45dvh;padding:14px;border:1px solid #79549a65;border-radius:16px;color:var(--ink);background:#f2e8f54d;font:16px/1.65 'DM Sans',sans-serif;resize:vertical}.transcript-editor p{font-size:12px;line-height:1.5;color:var(--muted);margin:10px 0 16px}.transcript-editor>div{display:flex;justify-content:flex-end;gap:12px;flex-wrap:wrap}.transcript-editor button{min-height:44px}
+@media(max-width:480px){.conversation-status{font-size:13px}.last-words{padding:8px 12px}.last-words .quiet-link{padding:4px}.transcript-editor{padding:16px}}
+@media(prefers-reduced-motion:reduce){.conversation-status .status-mark i,.voice-orb[data-phase] .orb-ring{animation:none!important}}
+[data-still=true] .conversation-status .status-mark i,[data-still=true] .voice-orb[data-phase] .orb-ring{animation:none!important}

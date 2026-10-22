@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {prebuiltAppConfig} from '@mlc-ai/web-llm';
+import {localModelId} from '../src/local-ai.ts';
+const model=prebuiltAppConfig.model_list.find(m=>m.model_id===localModelId);
+assert.equal(localModelId,'Llama-3.2-1B-Instruct-q4f16_1-MLC');
+assert.ok(model,'Selected model must exist in the installed SDK');
+assert.ok(model.low_resource_required);
+assert.ok(model.model_lib.includes('webgpu.wasm'));
+assert.ok(model.model.startsWith('https://huggingface.co/mlc-ai/'));
+assert.ok(model.vram_required_MB<1000);
+console.log(`Local Llama model validated against installed SDK: ${model.model_id}, listed VRAM ${model.vram_required_MB} MB (not a phone benchmark).`);

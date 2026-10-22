@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {verifyModelGeneration,watchModelWorker} from '../src/model-health.ts';
+const calls=[];
+await verifyModelGeneration({chat:{completions:{create:async request=>{assert.equal(request.max_tokens,1);assert.equal(request.stream,false);calls.push('inference');}}},resetChat:async()=>{calls.push('reset');}});
+assert.deepEqual(calls,['inference','reset']);
+let reset=false;
+await assert.rejects(verifyModelGeneration({chat:{completions:{create:async()=>{throw Error('GPU device lost');}}},resetChat:async()=>{reset=true;}}),/GPU device lost/);
+assert.equal(reset,false);
+const worker=new EventTarget(),errors=[];
+const unwatch=watchModelWorker(worker,error=>errors.push(error.message));
+worker.dispatchEvent(new Event('error'));worker.dispatchEvent(new Event('messageerror'));
+assert.match(errors[0],/graphics memory/);assert.match(errors[1],/communication/);
+unwatch();worker.dispatchEvent(new Event('error'));assert.equal(errors.length,2);
+console.log('Model health checks passed: actual inference before readiness, reset, failure propagation, worker errors and cleanup.');

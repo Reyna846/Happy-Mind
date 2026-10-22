@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {conversationStatus} from '../src/conversation-status.ts';
+import {lastEditableTurn,correctedContext} from '../src/conversation-edit.ts';
+import {freshContext,recordTurn} from '../src/adaptation.ts';
+import {interruptReplyWork} from '../src/interrupt-reply.ts';
+const base={model:'ready',mic:'idle',listening:false,speaking:false,voicePending:false,editing:false,interrupting:false};
+for(const [changes,phase] of [[{},'ready'],[{model:'busy'},'thinking'],[{mic:'opening'},'opening'],[{mic:'listening',model:'busy',interrupting:true},'listening'],[{mic:'transcribing',model:'busy'},'transcribing'],[{speaking:true,model:'busy'},'speaking'],[{voicePending:true},'voice'],[{interrupting:true},'interrupting'],[{editing:true,speaking:true},'editing']])assert.equal(conversationStatus({...base,...changes}).phase,phase);
+const messages=[{role:'user',content:'First thought'},{role:'assistant',content:'First answer'},{role:'user',content:'Wrong words'},{role:'assistant',content:'Answer to wrong words'}];
+const before=JSON.stringify(messages),edit=lastEditableTurn(messages);assert.equal(edit.index,2);assert.equal(edit.words,'Wrong words');assert.deepEqual(edit.prefix,messages.slice(0,2));assert.equal(JSON.stringify(messages),before);assert.equal(lastEditableTurn([]),null);
+let context=recordTurn(recordTurn(freshContext(),'First thought'),'Just listen');context.helpful=['draw'];context.offered=[{id:'draw',turn:1},{id:'breathe',turn:2}];
+const restored=correctedContext(context,edit.prefix);assert.equal(restored.turn,1);assert.equal(restored.preference,'open','wrong last transcript must not retain listen preference');assert.deepEqual(restored.helpful,['draw']);assert.deepEqual(restored.offered,[{id:'draw',turn:1}]);assert.equal(recordTurn(restored,'Just listen please').preference,'listen');
+let interrupted=0,resolve,done=false;const engine={interruptGenerate:()=>interrupted++};const work=new Promise(r=>resolve=r);const pending=interruptReplyWork(engine,work).then(()=>done=true);await Promise.resolve();assert.equal(interrupted,1);assert.equal(done,false,'new inference must wait for the old stream to drain');resolve();await pending;assert(done);
+await interruptReplyWork(engine,Promise.reject(Error('expected cancellation')));await assert.rejects(interruptReplyWork(engine,new Promise(()=>{}),5),/could not pause/);assert.equal(interrupted,3);
+console.log('Conversation QOL passed: phase priorities, last-turn correction/prefix/context, interruption drain, cancellation and bounded recovery.');

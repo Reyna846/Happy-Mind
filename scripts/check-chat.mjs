@@ -25,3 +25,12 @@ for(const bad of [{...artifact,kind:'script'},{...artifact,title:'x'.repeat(61)}
 console.log('Artifact checks passed: compatible optional action, bounded text, rejected unknown kinds/palettes/executable fields.');
 const {planResponse,freshContext}=await import('../src/adaptation.ts');
 assert.equal(planResponse({...valid,artifact},{...freshContext(),preference:'listen'}).artifact,null);
+
+// Spoken context stays smaller while preserving the newest user turn.
+const voiceHistory = Array.from({length:8},(_,i)=>({role:i%2?'user':'assistant',content:'x'.repeat(600)}));
+const {boundedMessages:voiceBounded}=await import('../src/local-ai.ts');
+const shortHistory=voiceBounded(voiceHistory,true);
+assert.equal(shortHistory.at(-1).role,'user');
+assert(shortHistory.length<=4);
+assert(shortHistory.reduce((sum,m)=>sum+m.content.length,0)<=2400);
+assert(voiceBounded(voiceHistory).length>shortHistory.length);

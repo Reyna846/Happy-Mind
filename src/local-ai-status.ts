@@ -5,6 +5,7 @@ export function preparationProgress(progress:number,text=''){
 }
 export function localAIFailure(error:unknown,stage:'prepare'|'reply'){
  const message=error instanceof Error?error.message:String(error);
+ if(/worker communication/i.test(message))return 'The companion lost its connection inside the app. Your words are still here. Set up the companion again to retry.';
  if(/timeout/i.test(message))return stage==='prepare'?'Preparation took too long. The first download is large; check your connection, then try again.':'The local model took too long to reply. Your message is still here. Try a shorter message or prepare it again.';
  if(/gpu|adapter|shader|device.*lost|memory|allocation|buffer.*size/i.test(message))return 'The local model could not run on this device’s graphics hardware. Try another WebGPU-capable browser or device; the quiet activities still work.';
  if(/fetch|network|download|https|connection/i.test(message))return 'The model download was interrupted. Check your connection and try Prepare again; downloaded files may already be cached.';

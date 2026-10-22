@@ -1,4 +1,5 @@
 import {preparationProgress} from './local-ai-status.ts';
+import {verifyModelGeneration} from './model-health.ts';
 import { activities, activityIds } from './activity-registry.ts';
 import type { WebWorkerMLCEngine } from '@mlc-ai/web-llm';
 export type Message = { role:'user'|'assistant'; content:string };
@@ -13,9 +14,12 @@ Do not claim to start an activity; the person chooses. Never output code, markup
 export const localVoiceInstructions = `You are a calm, attentive AI companion. Reply directly to the person's words in one or two short sentences, in plain spoken text only. Acknowledge something specific; ask at most one optional question. Do not output JSON, code, markup, or app instructions. Respect requests to just listen or avoid advice; do not repeat declined exercises. Suggest an activity only if asked. Do not diagnose, prescribe, claim to be human, force optimism, or encourage dependence. If there is immediate danger, encourage nearby trusted people or local emergency help; never invent phone numbers.`;
 export async function loadLocalAI(worker:Worker,onProgress:(text:string)=>void):Promise<WebWorkerMLCEngine> {
   const {CreateWebWorkerMLCEngine}=await import('@mlc-ai/web-llm');
-  return CreateWebWorkerMLCEngine(worker,'Qwen2.5-1.5B-Instruct-q4f16_1-MLC',{
+  const engine=await CreateWebWorkerMLCEngine(worker,'Qwen2.5-1.5B-Instruct-q4f16_1-MLC',{
     initProgressCallback:report=>onProgress(preparationProgress(report.progress,report.text))
   });
+  onProgress('Checking the companion can reply…');
+  await verifyModelGeneration(engine);
+  return engine;
 }
 export function boundedMessages(messages:Message[]):Message[]{
   // A failed/cancelled reply can leave adjacent user turns; normalize for providers.

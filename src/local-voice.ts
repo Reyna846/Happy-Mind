@@ -7,7 +7,7 @@ let playbackEpoch=0;
 let output:GainNode|undefined;
 const pending = new Map<number,{resolve:(data:any)=>void;reject:(error:Error)=>void;timer:ReturnType<typeof setTimeout>}>();
 export const heartReady = () => ready;
-export const heartSelected = () => localStorage.getItem('hm-tts-engine') === 'heart';
+export const heartSelected = () => (localStorage.getItem('hm-tts-engine') || 'heart') === 'heart';
 function request(type:string,text?:string):Promise<any> {
  if (!worker) {
   worker = new Worker(new URL('./kokoro-worker.ts',import.meta.url),{type:'module'});

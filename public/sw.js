@@ -1,4 +1,4 @@
-const CACHE = 'happy-mind-v44';
+const CACHE = 'happy-mind-v46';
 self.addEventListener('install', event => { event.waitUntil((async () => { const cache = await caches.open(CACHE); const base = new URL('./', self.location); await cache.addAll(['./','icon.svg','apple-touch-icon.png','icon-192.png','icon-512.png','manifest.webmanifest','art/room.svg','art/moon/sleepy-moon-strip.png','models/brain-anatomy.glb','audio/rain.ogg','audio/water-drops.ogg','audio/CREDITS.md',...['arrive','look','feel','listen','rest','in','out','in-left','out-left','in-right','out-right'].map(id=>'audio/guides/'+id+'.wav')].map(p=>new URL(p,base).href)); const html = await (await cache.match(base.href)).text(); const assets = [...html.matchAll(/(?:src|href)="([^" ]+\.(?:js|css))"/g)].map(m=>new URL(m[1],base).href); await cache.addAll(assets); })()); });
 self.addEventListener('activate', event => { event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('happy-mind-') && k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients?.claim())); });
 self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting();});

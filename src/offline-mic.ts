@@ -1,5 +1,5 @@
 export type MicState='off'|'loading'|'ready'|'error';
-let state:MicState='off',message='',selected=localStorage.getItem('hm-mic-engine')==='offline';
+let state:MicState='off',message='',selected=localStorage.getItem('hm-mic-engine')!=='browser';
 let worker:Worker|undefined,serial=0;
 const listeners=new Set<()=>void>();
 const pending=new Map<number,{resolve:(data:{text?:string})=>void;reject:(e:Error)=>void;timer:ReturnType<typeof setTimeout>}>();

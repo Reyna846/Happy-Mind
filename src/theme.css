@@ -1,0 +1,52 @@
+/* Theme is independent of the atmosphere palette and is the final styling layer. */
+.theme-options{min-width:0}.theme-options legend{font-size:13px;font-weight:500}.theme-options>div{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.theme-options button{display:flex;align-items:center;justify-content:center;gap:7px;min-height:48px;padding:10px 12px;border:1px solid #9674ae55;border-radius:18px;background:var(--control-glass);box-shadow:var(--control-shadow);color:var(--ink);font:inherit;font-size:13px}.theme-options button[aria-pressed=true]{background:#b795cf45;border-color:#8d65a7}.theme-options .setting-hint{margin-bottom:0}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark;background:#211b2c;--ink:#eee5f6;--muted:#c0b0cf;--accent:#c6a4e1;--tint:#211b2c;--card:#352b43;--control-plum:#b88ed6;--control-edge:#9c81b149;--control-glass:linear-gradient(145deg,#45374fbd,#312739b8);--control-shadow:inset 0 1px #d9bafa18,0 4px 14px #100c182b;--control-focus:#d1b0ee}
+:root[data-theme=dark] :is(.app-shell,dialog,.slide-entry){--ink:#eee5f6;--muted:#c0b0cf;--accent:#c6a4e1;--tint:#211b2c;--card:#352b43;--control-glass:linear-gradient(145deg,#45374fbd,#312739b8);--control-edge:#9c81b149;--control-shadow:inset 0 1px #d9bafa18,0 4px 14px #100c182b;--control-focus:#d1b0ee;color:var(--ink)}
+:root[data-theme=dark] body{background:#211b2c;color:var(--ink)}
+:root[data-theme=dark] .landscape{background:radial-gradient(ellipse at 25% 8%,#56426355,transparent 55%),linear-gradient(150deg,#2c2438,#1d1928)!important;filter:none}
+:root[data-theme=dark][data-mood=dusk] .landscape{background:radial-gradient(ellipse at top,#343453,#191b2b)!important}
+:root[data-theme=dark][data-mood=sand] .landscape{background:radial-gradient(ellipse at top,#453044,#211b2b)!important}
+:root[data-theme=dark] .wash{background:linear-gradient(#211a301a,#1a152630)!important}
+:root[data-theme=dark] .slide-entry{background:radial-gradient(ellipse at 50% 30%,#493855,#211b2c)}
+:root[data-theme=dark] :is(.entry-track,.entry-thumb,.room-nav,.volume-popover){background:var(--control-glass);color:var(--ink);border-color:var(--control-edge);box-shadow:var(--control-shadow)}
+:root[data-theme=dark] :is(.brand,.icon-button,.header-back,.room-nav button,.eyebrow,.intro,.activity-instruction,.voice-disclosure){color:var(--ink)}
+:root[data-theme=dark] :is(.arrival-note,.entry-key-hint,.header-note,.card-copy>span,.voice-state,.chat-empty small){color:var(--muted)}
+:root[data-theme=dark] :is(.moment-tile,.moment-tile:last-child,.room-card,.home-talk-card,.home-start-grid button,.carousel-room,.module-picker button,.calm-module,.breath-practice-card,.quick-grounding,.subtitle-box,.companion-setup,.chat-notice,.composer,.chat-composer,.voice-draft,.message.assistant,.message.user,.notice,.creation-card,.room-creations,.notice-choices button,.sound-options button){background:var(--control-glass);color:var(--ink);border-color:var(--control-edge);box-shadow:var(--control-shadow)}
+:root[data-theme=dark] .message.user{background:#4b365c}
+:root[data-theme=dark] :is(textarea,select,.voice-settings select,.offline-mic-settings select){background:#2b2336;color:var(--ink);border-color:#9473ab66;box-shadow:inset 0 1px #d9bafa12}
+:root[data-theme=dark] :is(.subtitle-text,.chat-composer textarea){background:transparent}
+:root[data-theme=dark] textarea::placeholder{color:#bba9c9;opacity:1}
+:root[data-theme=dark] option{background:#2b2336;color:#eee5f6}
+:root[data-theme=dark] dialog{background:#302638f5!important;color:var(--ink);border-color:#9e7bb85c;box-shadow:0 22px 80px #09061080,inset 0 1px #d5b7e51a}
+:root[data-theme=dark] dialog::backdrop{background:#100b1ab3;backdrop-filter:blur(12px)}
+:root[data-theme=dark] .settings-group{border-color:#9473ab35}
+:root[data-theme=dark] :is(.settings-group>summary:hover){background:#b18ac014}
+:root[data-theme=dark] .setting{border-color:#9473ab35}
+:root[data-theme=dark] :is(.quiet-link,.privacy,.voice-settings label,.offline-mic-settings label,.theme-options legend,.setting-hint,.setting small,.night-notes,.night-notes a){color:var(--muted)}
+:root[data-theme=dark] .switch{background:#55425f}:root[data-theme=dark] .switch[aria-checked=true]{background:#9b71bb}:root[data-theme=dark] .switch span{background:#e0c9ed}
+:root[data-theme=dark] :is(.moment-strip button,.nature-actions .secondary,.wipe-sizes button,.install-app button,.theme-options button,.avatar-options button,.breath-techniques button,.companion-options,.segmented,.guide-stop){background:var(--control-glass);color:var(--ink);border-color:var(--control-edge);box-shadow:var(--control-shadow)}
+:root[data-theme=dark] :is(.moment-strip button[aria-pressed=true],.wipe-sizes button[aria-pressed=true],.theme-options button[aria-pressed=true],.avatar-options button[aria-pressed=true],.breath-techniques button[aria-pressed=true],.mode-chip[aria-pressed=true],.sound-options button[aria-pressed=true],.notice-choices button[aria-pressed=true]){background:#614575;color:#f4e9fc;border-color:#bd97d47a}
+:root[data-theme=dark] .mode-chip{color:var(--muted)}
+:root[data-theme=dark] :is(.primary,.module-button,.hands-free-button,.send-message,.guide-play,.room-nav button[aria-current=page]){background:linear-gradient(145deg,#885ba5,#6d4588);color:#fff4ff;border-color:#d1b0ee55;box-shadow:inset 0 1px #f3dfff29,0 5px 18px #10091938}
+:root[data-theme=dark] :is(.moment-tile>span,.card-symbol,.carousel-room-icon,.home-fidget svg){color:#d0afe5}
+:root[data-theme=dark] .nature-scene{border-color:#9473ab55;box-shadow:0 12px 35px #0f091d40}
+:root[data-theme=dark] :is(.nature-scene,.sand-surface,.drawing-paper,.cat-touch){filter:brightness(.8) saturate(.9)}
+:root[data-theme=dark] :is(.drawing-paper,.drawing-surface){background:#3f354b}
+:root[data-theme=dark] .room-winddown .landscape{background:radial-gradient(ellipse at top,#362c43,#1b1725)!important}
+:root[data-theme=dark] .night-resting{background:transparent}
+:root[data-theme=dark] :is(.night-goodnight,.night-affirmation){color:#e1c9f0}
+:root[data-theme=dark] .room-tools,:root[data-theme=dark] .module-tray{border-color:#a180b63d}
+:root[data-theme=dark] :is(button,select,textarea,input,a,summary,[tabindex="0"]):focus-visible{outline-color:#d1b0ee;box-shadow:0 0 0 5px #b18ac025}
+@media(hover:hover){:root[data-theme=dark] :is(.moment-tile,.room-card,.moment-strip button,.nature-actions .secondary,.theme-options button,.quiet-link,.icon-button):not(:disabled):hover{background:#4b3959;color:#f2e5fb}}
+@media(max-width:359px){.theme-options button{padding:10px 7px;gap:5px;font-size:12px}}
+
+/* Drawing ink stays legible on the dark paper; existing marks retain their chosen hue. */
+:root[data-theme=dark] .drawing-paper polyline[stroke="#678d7a"]{stroke:#abd2bb}:root[data-theme=dark] .drawing-paper polyline[stroke="#9d7caa"]{stroke:#d0afe5}:root[data-theme=dark] .drawing-paper polyline[stroke="#bd9367"]{stroke:#dfbf95}:root[data-theme=dark] .drawing-paper>path{stroke-opacity:.45}
+:root[data-theme=dark] .ink-options button[aria-label="Sage ink"]{color:#abd2bb!important}:root[data-theme=dark] .ink-options button[aria-label="Lavender ink"]{color:#d0afe5!important}:root[data-theme=dark] .ink-options button[aria-label="Sand ink"]{color:#dfbf95!important}
+:root[data-theme=dark] :is(.drawing-actions>.quiet-link,.practice-feedback button,.offline-mic-settings>.quiet-link){background:var(--control-glass);border-color:var(--control-edge);color:var(--ink)}
+:root[data-theme=dark] .soft-bubble{background:radial-gradient(circle at 30% 25%,#705a81,#3d304d);border-color:#a184b75c;box-shadow:inset 0 2px 5px #c4a8dc21,0 5px 13px #10091c40}:root[data-theme=dark] .soft-bubble[aria-pressed=true]{background:#34283f;box-shadow:inset 0 3px 9px #110a1b77}
+@media(max-width:359px){.theme-options button{flex-direction:column;padding:9px 6px;gap:5px}}
+:root[data-theme=dark] .entry-slide-label{color:#d8c6e5}:root[data-theme=dark] .sculpture-controls button{color:#c7b2d8}:root[data-theme=dark] .sculpture-controls button[aria-pressed=true]{color:#eed9fa;background:#5e426d55}
+
+:root[data-theme=dark] :is(.settings-group[open],.settings-group[open]>summary){background:transparent}:root[data-theme=dark] .mood-options button{color:var(--muted)}:root[data-theme=dark] .mood-options button[aria-pressed=true]{background:#614575;color:#f4e9fc;border-color:#bd97d47a;box-shadow:var(--control-shadow)}

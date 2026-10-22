@@ -1,0 +1,4 @@
+.cozy-moment .nature-status{font-size:11px}.cozy-moment .cozy-scene{width:min(100%,340px,calc((100svh - 450px)*1.07))}.sleepy-loaf{transform-origin:150px 205px}.sleepy-loaf.is-snorfing{animation:loaf-snorf .4s ease-out}.paper-fold{animation:paper-arrive .45s ease-out;transform-origin:150px 150px}.stretch-cloud{transition:transform .16s ease-out}.cozy-moment[data-active=false] *{animation-play-state:paused!important}
+@keyframes loaf-snorf{0%,100%{scale:1}45%{scale:1.04 .94}}@keyframes paper-arrive{from{opacity:.3}to{opacity:1}}
+[data-still=true] .sleepy-loaf,[data-still=true] .paper-fold{animation:none}[data-still=true] .stretch-cloud{transition:none}@media(prefers-reduced-motion:reduce){.sleepy-loaf,.paper-fold{animation:none}.stretch-cloud{transition:none}}
+@media(max-height:650px){.cozy-moment .cozy-scene{width:min(100%,300px,calc((100svh - 395px)*1.07))}}

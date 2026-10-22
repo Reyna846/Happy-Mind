@@ -88,7 +88,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,select:focus-visible,
 .quick-grounding .guide-stop{width:46px}
 .voice-settings select,.offline-mic-settings select{border-radius:16px;padding:12px 14px;border-color:#79549a45;background:linear-gradient(145deg,#f3e8f64d,#e1cee933);box-shadow:inset 0 1px #fff7;color:var(--ink)}
 .voice-settings label,.offline-mic-settings label{font-size:13px;font-weight:500;margin-top:8px}
-.voice-settings>.quiet-link,.offline-mic-settings>.quiet-link{align-self:flex-start;border:1px solid #fff6;padding:10px 17px;border-radius:999px;background:var(--control-glass);box-shadow:var(--control-shadow);font-size:13px}
+.voice-settings>.quiet-link,.offline-mic-settings>.quiet-link,.install-app button{align-self:flex-start;border:1px solid #fff6;padding:10px 17px;border-radius:999px;background:var(--control-glass);box-shadow:var(--control-shadow);font-size:13px}
 @media(min-width:640px){.quick-grounding>div{grid-template-columns:140px 150px 46px}}
 .chat-room .conversation-mode-row{position:relative;top:auto}
 .swipe-ribbon{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;filter:drop-shadow(0 1px 5px #f1dcff80);z-index:2}
@@ -136,3 +136,18 @@ button:focus-visible{outline:2px solid var(--control-focus);outline-offset:3px}
 @media(max-width:480px){.conversation-status{font-size:13px}.last-words{padding:8px 12px}.last-words .quiet-link{padding:4px}.transcript-editor{padding:16px}}
 @media(prefers-reduced-motion:reduce){.conversation-status .status-mark i,.voice-orb[data-phase] .orb-ring{animation:none!important}}
 [data-still=true] .conversation-status .status-mark i,[data-still=true] .voice-orb[data-phase] .orb-ring{animation:none!important}
+
+.install-app .setting{flex-wrap:wrap;gap:12px}.install-app button{min-height:44px;flex-shrink:0}.install-app .setting>div{flex:1;min-width:160px}
+
+/* Voice selectors must flow separately; the legacy grid assigned both to row two. */
+.voice-settings{display:flex;flex-direction:column;align-items:stretch;min-width:0}.voice-settings select,.offline-mic-settings select{width:100%;min-width:0;max-width:100%;text-overflow:ellipsis}.voice-settings>.offline-mic-settings{width:100%;min-width:0}
+
+.moment-strip{display:flex;gap:8px;width:100%;min-width:0;overflow-x:auto;overscroll-behavior-x:contain;padding:6px 5px 12px;margin:2px auto 10px;scrollbar-width:thin;scrollbar-color:#9d7db060 transparent}.moment-strip button{flex:0 0 auto;display:flex;align-items:center;gap:8px;min-height:44px;padding:10px 15px;border:1px solid #fff6;border-radius:999px;background:var(--control-glass);box-shadow:var(--control-shadow);color:var(--ink);font-size:12px;white-space:nowrap}.moment-strip button[aria-pressed=true]{background:#d8bee988;border-color:#a381bb;color:#4c2c65}.moment-strip button>span{display:flex;align-items:center;font-size:18px}.wipe-sizes{display:flex;gap:4px;border:0;padding:0;margin:0;min-width:0}.wipe-sizes legend{font-size:11px;text-align:left;margin-bottom:4px;color:var(--muted)}.wipe-sizes button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:55px;padding:6px;border:1px solid #fff5;border-radius:16px;background:var(--control-glass);color:var(--ink);font-size:10px}.wipe-sizes button>span{border-radius:50%;background:#9b79b4;display:block}.wipe-sizes button[aria-pressed=true]{background:#d8bee988;border-color:#956cb0}.nature-fog .nature-status{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+
+/* Content-sized chips keep their label and icon inside the padded edge. */
+.conversation-mode-row .mode-chip{flex:0 0 auto;min-width:104px;min-height:46px;padding:11px 20px;gap:9px}
+dialog .settings-group[open]>summary,dialog .settings-group>summary:hover{background:#ad8cc330;border-radius:16px}dialog .settings-group{border-color:#9c7caf45}dialog .switch span{background:#d5c2df}dialog .switch[aria-checked=true]{background:#9470ac}
+
+/* Open settings keep the dialog surface; selection belongs to the controls. */
+.settings-group[open]{background:transparent}.mood-options button{color:var(--ink)}
+.notice-actions{display:flex;flex-direction:column;align-items:stretch;gap:12px;max-width:420px;margin:24px auto 0}.notice-actions>button{display:flex;align-items:center;justify-content:center;width:100%;min-height:48px;padding:12px 20px;text-align:center;white-space:normal;border-radius:999px;font-size:14px;line-height:1.5}.notice-actions .notice-companion{margin:0;border:1px solid var(--control-edge);background:var(--control-glass);box-shadow:var(--control-shadow);color:var(--ink)}

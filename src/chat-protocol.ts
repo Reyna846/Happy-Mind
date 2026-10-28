@@ -6,7 +6,11 @@ import type { Activity } from './activity-registry.ts';
 export type Ambience = 'keep' | 'soften' | 'quiet';
 export type CompanionReply = { reply:string; activity:Activity|null; mood:Mood|null; ambience:Ambience; artifact?:RoomArtifact|null };
 export const replySchema = JSON.stringify({type:'object',additionalProperties:false,required:['reply','activity','mood','ambience'],properties:{artifact:artifactSchema,reply:{type:'string'},activity:{enum:[...activityIds,null]},mood:{enum:['lake','dusk','sand',null]},ambience:{enum:['keep','soften','quiet']}}});
+export class ReplyValidationError extends Error {}
 export function parseCompanionReply(raw:string):CompanionReply {
+ try{return parseReply(raw);}catch{throw new ReplyValidationError('Invalid companion reply');}
+}
+function parseReply(raw:string):CompanionReply {
  const text=raw.trim();
  if(!text||text.length>6000)throw new Error('Invalid reply');
  // Providers without structured output may return plain text; that text gets no UI authority.

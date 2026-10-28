@@ -1,12 +1,13 @@
+import {useRetainedState} from './SessionMemory';
 import {Icon} from './Icon';
 import {useGuideAudio,type GuideCue} from './useGuideAudio';
 import {BreathSymbols} from './BreathSymbols';
 import {useEffect,useState} from 'react';
 import {breathPractices,practiceState,type BreathPractice} from './breath-practices';
 import {useBreathMusic} from './useBreathMusic';
-export function Breathing({active=true,sound=false,volume=.5,pauseSignal=0,onNext}:{active?:boolean;sound?:boolean;volume?:number;pauseSignal?:number;onNext?:()=>void}){
- const [technique,setTechnique]=useState<BreathPractice>('belly'),[elapsed,setElapsed]=useState(0),[running,setRunning]=useState(false),[music,setMusic]=useState(true),[hidden,setHidden]=useState(document.hidden);
- const [guide,setGuide]=useState(false);
+export function Breathing({active=true,sound=false,volume=.5,pauseSignal=0,onNext,sessionKey='breathe'}:{sessionKey?:string;active?:boolean;sound?:boolean;volume?:number;pauseSignal?:number;onNext?:()=>void}){
+ const [technique,setTechnique]=useRetainedState<BreathPractice>(sessionKey+':technique','belly'),[elapsed,setElapsed]=useRetainedState(sessionKey+':elapsed',0),[running,setRunning]=useState(false),[music,setMusic]=useRetainedState(sessionKey+':music',true),[hidden,setHidden]=useState(document.hidden);
+ const [guide,setGuide]=useRetainedState(sessionKey+':guide',false);
  const narration=useGuideAudio({active,sound,volume,pauseSignal});
  const practice=breathPractices[technique],phase=practiceState(technique,elapsed),playing=running&&active&&!hidden&&!phase.done;
  useEffect(()=>{if(!active)setRunning(false);},[active]);

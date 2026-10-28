@@ -1,3 +1,4 @@
+import {useRetainedState,useRetainedRef} from './SessionMemory';
 import {WindowVisitor,IdiotPebble,PondDuck,SillyFirefly} from './SillyMomentArt';
 import {launchStone,stonePosition,closedLoop,type StoneFlight} from './moment-play';
 import {useEffect,useId,useRef,useState} from 'react';
@@ -32,18 +33,18 @@ export function NatureMoments({kind,active,sound,volume,pauseSignal,still=false}
  const reduced=still||systemStill;
  useEffect(()=>{const media=window.matchMedia('(prefers-reduced-motion: reduce)');const change=()=>setSystemStill(media.matches);media.addEventListener('change',change);return()=>media.removeEventListener('change',change);},[]);
  const play=useMomentSound(sound&&active,volume,pauseSignal);
- const [time,setTime]=useState(0),[visible,setVisible]=useState(!document.hidden);
- const [flowers,setFlowers]=useState<Flower[]>([]),[trails,setTrails]=useState<Trail[]>([]),[skips,setSkips]=useState<StoneFlight[]>([]);
- const [fly,setFly]=useState<Point>({x:150,y:130}),[resting,setResting]=useState(true);
- const [message,setMessage]=useState('');
- const [wipeSize,setWipeSize]=useState(30);
- const [visitor,setVisitor]=useState(0),[blepUntil,setBlepUntil]=useState(0),[look,setLook]=useState<Point>({x:0,y:0});
- const [pebble,setPebble]=useState(0),[aim,setAim]=useState<Point|null>(null);
- const [bonkUntil,setBonkUntil]=useState(0),[danceUntil,setDanceUntil]=useState(0),[friends,setFriends]=useState(0);
- const flyTrail=useRef<(Point&{at:number})[]>([]),lastSplash=useRef('');
+ const [time,setTime]=useRetainedState('nature:'+kind+':time',0),[visible,setVisible]=useState(!document.hidden);
+ const [flowers,setFlowers]=useRetainedState<Flower[]>('nature:'+kind+':flowers',[]),[trails,setTrails]=useRetainedState<Trail[]>('nature:'+kind+':trails',[]),[skips,setSkips]=useRetainedState<StoneFlight[]>('nature:'+kind+':skips',[]);
+ const [fly,setFly]=useRetainedState<Point>('nature:'+kind+':fly',{x:150,y:130}),[resting,setResting]=useRetainedState('nature:'+kind+':resting',true);
+ const [message,setMessage]=useRetainedState('nature:'+kind+':message','');
+ const [wipeSize,setWipeSize]=useRetainedState('nature:'+kind+':wipeSize',30);
+ const [visitor,setVisitor]=useRetainedState('nature:'+kind+':visitor',0),[blepUntil,setBlepUntil]=useRetainedState('nature:'+kind+':blepUntil',0),[look,setLook]=useRetainedState<Point>('nature:'+kind+':look',{x:0,y:0});
+ const [pebble,setPebble]=useRetainedState('nature:'+kind+':pebble',0),[aim,setAim]=useState<Point|null>(null);
+ const [bonkUntil,setBonkUntil]=useRetainedState('nature:'+kind+':bonkUntil',0),[danceUntil,setDanceUntil]=useRetainedState('nature:'+kind+':danceUntil',0),[friends,setFriends]=useRetainedState('nature:'+kind+':friends',0);
+ const flyTrail=useRetainedRef<(Point&{at:number})[]>('nature:'+kind+':flyTrail',[]),lastSplash=useRef('');
  const lastWipeSound=useRef(-Infinity);
- const pointer=useRef<number|null>(null),start=useRef<Point>({x:0,y:0}),last=useRef<Point>({x:0,y:0}),watering=useRef<number|null>(null),idle=useRef(0);
- const elapsed=useRef(0);
+ const pointer=useRef<number|null>(null),start=useRef<Point>({x:0,y:0}),last=useRef<Point>({x:0,y:0}),watering=useRef<number|null>(null),idle=useRetainedRef('nature:'+kind+':idle',0);
+ const elapsed=useRetainedRef('nature:'+kind+':elapsed',0);
  useEffect(()=>{const change=()=>setVisible(!document.hidden);document.addEventListener('visibilitychange',change);return()=>document.removeEventListener('visibilitychange',change);},[]);
  useEffect(()=>{pointer.current=null;watering.current=null;setAim(null);setResting(true);},[active,visible,pauseSignal]);
  useEffect(()=>{

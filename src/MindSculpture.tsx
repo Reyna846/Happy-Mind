@@ -14,7 +14,7 @@ function makeModels(){
  const centreMaterial=new THREE.MeshStandardMaterial({color:0xffdbaf,roughness:.48,transparent:true});
  const brainMaterials=new Set<THREE.MeshStandardMaterial>();
 
- const petalGeometry=new THREE.SphereGeometry(1,28,20);
+ const petalGeometry=new THREE.SphereGeometry(1,20,14);
  const petals:{mesh:THREE.Mesh;angle:number;radius:number;tilt:number;z:number}[]=[];
  for(let layer=0;layer<2;layer++)for(let i=0;i<(layer?8:10);i++){
   const count=layer?8:10,angle=i/count*Math.PI*2+(layer?.2:0),radius=layer?.39:.53;
@@ -22,7 +22,7 @@ function makeModels(){
   const tilt=layer?.12:.25,z=layer?.16:0;
   mesh.position.set(Math.sin(angle)*radius,Math.cos(angle)*radius,z);mesh.rotation.set(tilt,0,-angle);flower.add(mesh);petals.push({mesh,angle,radius,tilt,z});
  }
- const centre=new THREE.Mesh(new THREE.SphereGeometry(.23,32,20),centreMaterial);centre.scale.z=.65;centre.position.z=.27;flower.add(centre);
+ const centre=new THREE.Mesh(new THREE.SphereGeometry(.23,24,16),centreMaterial);centre.scale.z=.65;centre.position.z=.27;flower.add(centre);
  const installBrain=(asset:THREE.Group)=>{const box=new THREE.Box3().setFromObject(asset),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());asset.position.sub(center);const normalized=new THREE.Group();normalized.rotation.set(.12,-.55,0);normalized.scale.setScalar(1.65/Math.max(size.y,.001));normalized.add(asset);brain.add(normalized);asset.traverse(object=>{if(object instanceof THREE.Mesh){for(const material of Array.isArray(object.material)?object.material:[object.material])if(material instanceof THREE.MeshStandardMaterial){material.color.set(0xffc8dc);material.roughness=.62;material.transparent=true;brainMaterials.add(material);}}});};
  return {root,installBrain,update:(blend:number,time:number,moving:boolean)=>{
   const closing=smoothBlend(0,1,blend),flowerOpacity=brain.children.length?1-smoothBlend(.12,.8,blend):1,brainOpacity=smoothBlend(.22,.9,blend);
@@ -45,17 +45,18 @@ export default function MindSculpture({still,fallback}:{still:boolean;fallback:R
  useEffect(()=>{
   const element=host.current;if(!element)return;let renderer:THREE.WebGLRenderer;
   try{renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{setFailed(true);return;}
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.75));renderer.setClearColor(0x000000,0);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,window.matchMedia('(pointer: coarse)').matches?1.25:1.75));renderer.setClearColor(0x000000,0);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
   renderer.domElement.setAttribute('aria-hidden','true');element.appendChild(renderer.domElement);
   const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(36,1,.1,30);camera.position.set(0,0,4.2);
   const models=makeModels();let disposed=false;const assetAbort=new AbortController();element.dataset.brainAsset='loading';
   void fetch(import.meta.env.BASE_URL+'models/brain-anatomy.glb',{signal:assetAbort.signal}).then(response=>{if(!response.ok)throw new Error('Brain asset unavailable');return response.arrayBuffer();}).then(buffer=>new GLTFLoader().parseAsync(buffer,import.meta.env.BASE_URL+'models/')).then(gltf=>{if(disposed){disposeModel(gltf.scene);return;}models.installBrain(gltf.scene);element.dataset.brainAsset='ready';state.current.dirty=true;}).catch(()=>{if(!disposed){element.dataset.brainAsset='error';setFailed(true);}});
   scene.add(models.root);scene.add(new THREE.HemisphereLight(0xfff8ff,0x9c7fb9,2));
   const key=new THREE.DirectionalLight(0xffffff,2.4);key.position.set(-3,4,6);scene.add(key);const rim=new THREE.DirectionalLight(0xd8c5fb,1.8);rim.position.set(3,1,-2);scene.add(rim);
-  let last=0,elapsed=0,sinceSwitch=0,bounce=0,bounceVelocity=0,inView=true,lost=false;
+  let last=0,lastPaint=-Infinity,elapsed=0,sinceSwitch=0,bounce=0,bounceVelocity=0,inView=true,lost=false;
   const resize=()=>{const width=element.clientWidth,height=element.clientHeight;if(!width||!height)return;renderer.setSize(width,height);camera.aspect=width/height;camera.updateProjectionMatrix();state.current.dirty=true;};
   const observer=new ResizeObserver(resize);observer.observe(element);resize();
   const frame=(now:number)=>{
+   if(now-lastPaint<1000/30&&!state.current.dirty)return;lastPaint=now;
    const dt=last?Math.min((now-last)/1000,.05):0;last=now;elapsed+=dt;
    const s=state.current;if(s.reset){sinceSwitch=0;s.reset=false;}
    if(s.mode==='auto'&&!quietRef.current&&!drag.current){sinceSwitch+=dt;if(sinceSwitch>7){s.target=s.target===0?1:0;sinceSwitch=0;}}

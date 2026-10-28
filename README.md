@@ -21,7 +21,7 @@ The first production visit caches the shell and built JS/CSS for offline use. To
 
 ## Free personal AI
 
-Talk offers an explicit on-device model download using WebLLM and Qwen2.5-1.5B. No account, API key, cloud AI bill, or separate backend is required for this option. Model/runtime files are downloaded from their hosts and may remain browser-cached; words are kept in memory and processed by the local model. Device compatibility, storage, and initial download are material requirements. A small model is less capable than GPT. A real local generation and drawing-module handoff passed in the desktop in-app browser; phone inference remains unverified. No silent cloud fallback is used.
+Talk offers an explicit on-device model download using WebLLM and Llama 3.2 1B. No account, API key, cloud AI bill, or separate backend is required for this option. Model/runtime files are downloaded from their hosts and may remain browser-cached; words are kept in memory and processed by the local model. Device compatibility, storage, and initial download are material requirements. A small model is less capable than GPT. An earlier Qwen model completed a local generation and drawing-module handoff in the desktop in-app browser; phone inference remains unverified. No silent cloud fallback is used.
 
 The local runtime prompt is in `src/local-ai.ts`; keep it aligned with `docs/AGENT_BEHAVIOR.md`. Context is bounded; loading and generation can be cancelled. Switching rooms cancels active work; page hide terminates the worker. Clear words resets chat state. Spoken replies use browser speech synthesis, which may involve vendor servers. Voice and Chat share a conversation. Voice has a speaking circle, subtitles, browser dictation turns and read-aloud; full-duplex streaming is not implemented.
 
@@ -31,7 +31,7 @@ Optional future cloud integration requires server-only keys and explicit opt-in;
 
 ## Verification
 
-`npm run build -- --base=/happy-mind/` passes. Preview that build with `npm run preview -- --base=/happy-mind/`. `node scripts/check-pwa.mjs` checks manifest assets and service-worker cache behavior against the built output. Browser interaction and responsive checks passed; the in-app browser's offline reload did not render, so offline operation is not yet verified on a supported physical device.
+`npm run build -- --base=/Happy-Mind/` passes. Preview that build with `npm run preview -- --base=/Happy-Mind/`. `node scripts/check-pwa.mjs` checks manifest assets and service-worker cache behavior against the built output. Browser interaction and responsive checks passed; the in-app browser's offline reload did not render, so offline operation is not yet verified on a supported physical device.
 
 Latest checks: `node scripts/check-mood.mjs` tests word cues, negation and neutral text. Production build and PWA resource checks pass. Browser tested live mood switching/hold, local model preparation/cancel and manual/reduced-motion controls. Actual AI responses and read-aloud still need device validation.
 

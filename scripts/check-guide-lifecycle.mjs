@@ -2,7 +2,7 @@ import {readFile} from 'node:fs/promises';
 import {transform} from 'esbuild';
 import assert from 'node:assert/strict';
 const effects=[],notices=[],audio=[];const win=new EventTarget(),doc=new EventTarget();doc.hidden=false;globalThis.window=win;globalThis.document=doc;
-globalThis.guideHooks={useRef:value=>({current:value}),useState:()=>['',v=>notices.push(v)],useCallback:fn=>fn,useEffect:fn=>effects.push(fn)};
+globalThis.guideHooks={useRef:value=>({current:value}),useState:initial=>[initial,v=>{if(typeof initial==='string')notices.push(v);}],useCallback:fn=>fn,useEffect:fn=>effects.push(fn)};
 globalThis.Audio=class{src='';paused=true;currentTime=0;constructor(){audio.push(this);}pause(){this.paused=true;}play(){this.paused=false;return new Promise((resolve,reject)=>{this.resolve=resolve;this.reject=reject;});}};
 let duck=false;win.addEventListener('hm-guide-audio',e=>duck=e.detail);
 const source=(await readFile('src/useGuideAudio.ts','utf8')).replace("import {useCallback,useEffect,useRef,useState} from 'react';","const {useCallback,useEffect,useRef,useState}=globalThis.guideHooks;").replace("import.meta.env.BASE_URL","'/Happy-Mind/'");

@@ -1,3 +1,5 @@
+> Historical QA notes below refer to earlier Qwen builds. The current app downloads Llama 3.2 1B; these older inference results do not validate the current model on a phone.
+
 # App audit — 21 October 2026
 
 ## Fixed

@@ -1,5 +1,9 @@
 let worker: Worker | undefined;
 let ready = false;
+let preparation:Promise<void>|undefined;
+const listeners=new Set<()=>void>();
+export const subscribeHeart=(fn:()=>void)=>{listeners.add(fn);return()=>{listeners.delete(fn);};};
+const notify=()=>{for(const listener of listeners)listener();};
 let serial = 0;
 let source: AudioBufferSourceNode | undefined;
 let context: AudioContext | undefined;
@@ -15,7 +19,7 @@ function request(type:string,text?:string):Promise<any> {
    const task=pending.get(data.id); if(!task)return;
    clearTimeout(task.timer);pending.delete(data.id);
    if(data.type==='error')task.reject(new Error('Heart could not prepare or speak. Try the device voice.'));
-   else {if(data.type==='ready')ready=true;task.resolve(data);}
+   else {if(data.type==='ready'){ready=true;notify();}task.resolve(data);}
   };
   worker.onerror=()=>resetHeart();
  }
@@ -26,10 +30,10 @@ function request(type:string,text?:string):Promise<any> {
  });
 }
 export function resetHeart(){
- worker?.terminate();worker=undefined;ready=false;stopHeart();
+ worker?.terminate();worker=undefined;ready=false;preparation=undefined;stopHeart();const previous=context;context=undefined;if(previous&&previous.state!=='closed')void previous.close().catch(()=>{});notify();
  for(const task of pending.values()){clearTimeout(task.timer);task.reject(new Error('Heart stopped. Try preparing again or use the device voice.'));}pending.clear();
 }
-export async function prepareHeart(){if(!ready)await request('prepare');}
+export async function prepareHeart(){if(ready)return;if(!preparation)preparation=request('prepare').then(()=>{});const current=preparation;try{await current;}finally{if(preparation===current)preparation=undefined;}}
 export function unlockHeart(){
  context??=new AudioContext();void context.resume().catch(()=>{});
 }

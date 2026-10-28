@@ -1,3 +1,4 @@
+import {useRetainedState,useRetainedRef} from './SessionMemory';
 import {useEffect,useId,useRef,useState} from 'react';
 import type {PointerEvent} from 'react';
 import {Eyes} from './SillyMomentArt';
@@ -11,9 +12,9 @@ const clamp=(n:number,a:number,b:number)=>Math.max(a,Math.min(b,n));
 
 export function DandelionPlay({active,sound,volume,pauseSignal,still=false}:{active:boolean;sound:boolean;volume:number;pauseSignal:number;still?:boolean}){
  const id=useId().replace(/:/g,'');
- const world=useRef<Patch>({time:0,wind:0,serial:0,seeds:[],flowers:[],puffAt:-1000});
+ const world=useRetainedRef<Patch>('dandelion:world',{time:0,wind:0,serial:0,seeds:[],flowers:[],puffAt:-1000});
  const [frame,setFrame]=useState(world.current),[visible,setVisible]=useState(!document.hidden),[systemStill,setSystemStill]=useState(()=>matchMedia('(prefers-reduced-motion: reduce)').matches);
- const [message,setMessage]=useState('Send a few tiny parachutists. See what grows.');
+ const [message,setMessage]=useRetainedState('dandelion'+':message','Send a few tiny parachutists. See what grows.');
  const pointer=useRef<number|null>(null),last=useRef(150),play=useMomentSound(active&&sound,volume,pauseSignal),reduced=still||systemStill;
  useEffect(()=>{
   const media=matchMedia('(prefers-reduced-motion: reduce)'),motion=()=>setSystemStill(media.matches),hide=()=>setVisible(!document.hidden);

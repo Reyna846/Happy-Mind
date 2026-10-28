@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
-import {parseCompanionReply, breathAt} from '../src/chat-protocol.ts';
+import {parseCompanionReply, ReplyValidationError, breathAt} from '../src/chat-protocol.ts';
 import {boundedMessages} from '../src/local-ai.ts';
+assert.throws(()=>parseCompanionReply('{bad json'),ReplyValidationError);
 const valid={reply:'Would a little drawing feel useful?',activity:'draw',mood:'sand',ambience:'soften'};
 assert.deepEqual(parseCompanionReply(JSON.stringify(valid)),valid);
 for(const data of [ {...valid,activity:'eval'}, {...valid,mood:'red'}, {...valid,ambience:'enable_microphone'}, {...valid,url:'https://example.com'}, {...valid,reply:''}, {...valid,reply:'x'.repeat(1201)}, {...valid,activity:undefined}, [] ])assert.throws(()=>parseCompanionReply(JSON.stringify(data)));

@@ -31,8 +31,10 @@ await installed;
 assert([...entries.keys()].some(k=>k.endsWith('.js')),'built JS must be cached');
 assert([...entries.keys()].some(k=>k.endsWith('.css')),'built CSS must be cached');
 assert([...entries.keys()].filter(k=>k.includes('/audio/guides/')).length===11,'all guides precached');
-const runtime='https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1/dist/ort-wasm-simd-threaded.jsep.wasm';
-let warm;handlers.fetch({request:{method:'GET',url:runtime,mode:'cors'},respondWith:p=>warm=p});assert.equal((await warm).status,200);assert(entries.has(runtime),'runtime cached after first preparation');
+for(const version of ['3.8.1','3.9.0','4.0.12']){
+const runtime=`https://cdn.jsdelivr.net/npm/@huggingface/transformers@${version}/dist/ort-wasm-simd-threaded.jsep.wasm`;
+let warm;handlers.fetch({request:{method:'GET',url:runtime,mode:'cors'},respondWith:p=>warm=p});assert.equal((await warm).status,200);assert(entries.has(runtime),'runtime cached after first preparation');}
+let foreign;handlers.fetch({request:{method:'GET',url:'https://untrusted.example/npm/@huggingface/transformers@3.9.0/dist/ort-test.wasm',mode:'cors'},respondWith:p=>foreign=p});assert.equal(foreign,undefined,'runtime cache stays limited to the trusted CDN');
 let apiIntercepted;handlers.fetch({request:{method:'GET',url:base+'api/voice/status',mode:'cors'},respondWith:p=>apiIntercepted=p});
 await apiIntercepted;assert(!entries.has(base+'api/voice/status'),'private API must not be cached');
 revised=true;let page;handlers.fetch({request:{method:'GET',url:base,mode:'navigate'},respondWith:p=>page=p});assert.match(await (await page).text(),/refreshed/,'online navigation fetches new HTML');assert.match(await (await cache.match(base)).text(),/refreshed/,'fresh HTML replaces stale shell');handlers.message({data:{type:'SKIP_WAITING'}});assert(skipped,'explicit restart activates waiting update');

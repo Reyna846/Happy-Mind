@@ -1,3 +1,4 @@
+import {useRetainedState} from './SessionMemory';
 import { useEffect, useRef, useState } from 'react';
 import { volumeGain } from './soundscapes';
 
@@ -14,7 +15,7 @@ function purr(volume:number){
 }
 function meow(volume:number){const context=new AudioContext(),voice=context.createOscillator(),formant=context.createBiquadFilter(),gain=context.createGain();voice.type='sawtooth';voice.frequency.setValueAtTime(530,context.currentTime);voice.frequency.exponentialRampToValueAtTime(790,context.currentTime+.16);voice.frequency.exponentialRampToValueAtTime(400,context.currentTime+.65);formant.type='bandpass';formant.frequency.setValueAtTime(1600,context.currentTime);formant.frequency.linearRampToValueAtTime(950,context.currentTime+.65);formant.Q.value=2;gain.gain.setValueAtTime(0,context.currentTime);gain.gain.linearRampToValueAtTime(volumeGain(volume)*.45,context.currentTime+.08);gain.gain.exponentialRampToValueAtTime(.0001,context.currentTime+.75);voice.connect(formant);formant.connect(gain);gain.connect(context.destination);voice.start();voice.stop(context.currentTime+.8);const close=()=>{if(context.state!=='closed')void context.close().catch(()=>{});};voice.onended=close;void context.resume().catch(close);return close;}
 export function CatCompanion({sound,volume,pauseSignal}:{sound:boolean;volume:number;pauseSignal:number}){
- const [asking,setAsking]=useState(false),[fed,setFed]=useState(false);const meowStop=useRef<(()=>void)|null>(null);
+ const [asking,setAsking]=useRetainedState('cat'+':asking',false),[fed,setFed]=useRetainedState('cat'+':fed',false);const meowStop=useRef<(()=>void)|null>(null);
  const [happy,setHappy]=useState(false),[hearts,setHearts]=useState(0),[audioFailed,setAudioFailed]=useState(false),[purring,setPurring]=useState(false);
  const playing=useRef<ReturnType<typeof purr>|null>(null),timer=useRef<ReturnType<typeof setTimeout>|null>(null),pointer=useRef<number|null>(null),lastMove=useRef(0);
  const stop=()=>{if(timer.current)clearTimeout(timer.current);timer.current=null;playing.current?.stop();playing.current=null;meowStop.current?.();meowStop.current=null;setPurring(false);setHappy(false);pointer.current=null;};

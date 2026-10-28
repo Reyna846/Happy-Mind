@@ -1,3 +1,4 @@
+import {useRetainedState,useRetainedRef} from './SessionMemory';
 import {useEffect,useId,useRef,useState} from 'react';
 import type {PointerEvent} from 'react';
 import {Eyes} from './SillyMomentArt';
@@ -20,15 +21,15 @@ const cloudNames=['a highly qualified potato','a cloud with rabbit ambitions','a
 export function CozyMoments({kind,active,sound,volume,pauseSignal,still=false}:{kind:CozyMoment;active:boolean;sound:boolean;volume:number;pauseSignal:number;still?:boolean}){
  const id=useId().replace(/:/g,'');
  const [systemStill,setSystemStill]=useState(()=>matchMedia('(prefers-reduced-motion: reduce)').matches);
- const [visible,setVisible]=useState(!document.hidden),[time,setTime]=useState(0);
+ const [visible,setVisible]=useState(!document.hidden),[time,setTime]=useRetainedState('cozy:'+kind+':time',0);
  const reduced=still||systemStill;
  const play=useMomentSound(sound&&active,volume,pauseSignal);
- const clock=useRef(0),pointer=useRef<number|null>(null),start=useRef<Point>({x:150,y:140}),last=useRef<Point>({x:150,y:140});
- const [message,setMessage]=useState(''),[touch,setTouch]=useState<Point|null>(null);
- const [settled,setSettled]=useState(0),[sneezeUntil,setSneezeUntil]=useState(0),[blanket,setBlanket]=useState(false);
- const [fold,setFold]=useState(0),[sailing,setSailing]=useState(false),[paper,setPaper]=useState(0),[boat,setBoat]=useState<Point>({x:150,y:185}),[wakes,setWakes]=useState<Wake[]>([]);
- const boatRef=useRef<Point>({x:150,y:185}),destination=useRef<Point>({x:150,y:185}),lastWake=useRef(0),lastQuack=useRef(-Infinity);
- const [cloud,setCloud]=useState(0),[stretch,setStretch]=useState({x:1,y:1}),[look,setLook]=useState<Point>({x:0,y:0});
+ const clock=useRetainedRef('cozy:'+kind+':clock',0),pointer=useRef<number|null>(null),start=useRef<Point>({x:150,y:140}),last=useRef<Point>({x:150,y:140});
+ const [message,setMessage]=useRetainedState('cozy:'+kind+':message',''),[touch,setTouch]=useState<Point|null>(null);
+ const [settled,setSettled]=useRetainedState('cozy:'+kind+':settled',0),[sneezeUntil,setSneezeUntil]=useRetainedState('cozy:'+kind+':sneezeUntil',0),[blanket,setBlanket]=useRetainedState('cozy:'+kind+':blanket',false);
+ const [fold,setFold]=useRetainedState('cozy:'+kind+':fold',0),[sailing,setSailing]=useRetainedState('cozy:'+kind+':sailing',false),[paper,setPaper]=useRetainedState('cozy:'+kind+':paper',0),[boat,setBoat]=useRetainedState<Point>('cozy:'+kind+':boat',{x:150,y:185}),[wakes,setWakes]=useRetainedState<Wake[]>('cozy:'+kind+':wakes',[]);
+ const boatRef=useRetainedRef<Point>('cozy:'+kind+':boatRef',{x:150,y:185}),destination=useRetainedRef<Point>('cozy:'+kind+':destination',{x:150,y:185}),lastWake=useRetainedRef('cozy:'+kind+':lastWake',0),lastQuack=useRef(-Infinity);
+ const [cloud,setCloud]=useRetainedState('cozy:'+kind+':cloud',0),[stretch,setStretch]=useRetainedState('cozy:'+kind+':stretch',{x:1,y:1}),[look,setLook]=useRetainedState<Point>('cozy:'+kind+':look',{x:0,y:0});
  const initialStretch=useRef({x:1,y:1}),lastCloudMove=useRef(0);
  useEffect(()=>{
   const media=matchMedia('(prefers-reduced-motion: reduce)'),motion=()=>setSystemStill(media.matches),visibility=()=>setVisible(!document.hidden);
